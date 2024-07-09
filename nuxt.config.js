@@ -1,4 +1,5 @@
-import colors from 'vuetify/es5/util/colors'
+import colors from 'vuetify/es5/util/colors';
+import { resolve } from 'path';
 
 export default {
   // Disable server-side rendering: https://go.nuxtjs.dev/ssr-mode
@@ -41,6 +42,7 @@ export default {
   modules: [
     // https://go.nuxtjs.dev/axios
     '@nuxtjs/axios',
+    '@nuxtjs/vuetify',
   ],
 
   // Axios module configuration: https://go.nuxtjs.dev/config-axios
@@ -53,7 +55,7 @@ export default {
   vuetify: {
     customVariables: ['~/assets/variables.scss'],
     theme: {
-      dark: true,
+      dark: false,
       themes: {
         dark: {
           primary: colors.blue.darken2,
@@ -68,6 +70,14 @@ export default {
     },
   },
 
+  alias: {
+    '@components': resolve(__dirname, './components'),
+    '@pages': resolve(__dirname, './pages'),
+    '@store': resolve(__dirname, './store'),
+    '@assets': resolve(__dirname, './assets'),
+    '@static': resolve(__dirname, './static'),
+  },
+
   // Build Configuration: https://go.nuxtjs.dev/config-build
   build: {},
-}
+};
