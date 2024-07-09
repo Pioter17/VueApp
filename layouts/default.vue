@@ -1,8 +1,8 @@
 <template>
   <v-app id="inspire">
-    <v-app-bar flat>
+    <v-app-bar style="border: 4px solid blue">
       <v-container
-        class="mx-auto d-flex align-center justify-center"
+        class="d-flex align-center justify-center"
         style="border: 5px solid green"
       >
         <v-avatar class="me-4" color="grey-darken-1" size="32">
@@ -31,8 +31,8 @@
       </v-container>
     </v-app-bar>
 
-    <v-main class="bg-grey-lighten-3">
-      <v-container>
+    <v-main class="bg-grey-lighten-3" style="height: 80vh">
+      <v-container style="border: 6px solid orange">
         <Nuxt />
       </v-container>
     </v-main>

@@ -7,6 +7,7 @@ export default {
           name: 'Application 1',
           date: '2022-07-15',
           server: 3,
+          serverId: 'CdEfGhIjKlMnOpQrStUvWxYzAbCdEfGh',
           tasks: 1,
         },
         {
@@ -14,6 +15,7 @@ export default {
           name: 'Application 2',
           date: '2021-11-23',
           server: 1,
+          serverId: 'aBcDeFgHiJkLmNoPqRsTuVwXyZaBcDe',
           tasks: 3,
         },
         {
@@ -21,6 +23,7 @@ export default {
           name: 'Application 3',
           date: '2020-04-10',
           server: 4,
+          serverId: 'DeFgHiJkLmNoPqRsTuVwXyZaBcDeFgHi',
           tasks: 3,
         },
         {
@@ -28,6 +31,7 @@ export default {
           name: 'Application 4',
           date: '2023-08-19',
           server: 2,
+          serverId: 'BcDeFgHiJkLmNoPqRsTuVwXyZaBcDeFg',
           tasks: 1,
         },
         {
@@ -35,6 +39,7 @@ export default {
           name: 'Application 5',
           date: '2021-01-05',
           server: 5,
+          serverId: 'EfGhIjKlMnOpQrStUvWxYzAbCdEfGhIj',
           tasks: 6,
         },
         {
@@ -42,6 +47,7 @@ export default {
           name: 'Application 6',
           date: '2020-06-15',
           server: 2,
+          serverId: 'BcDeFgHiJkLmNoPqRsTuVwXyZaBcDeFg',
           tasks: 0,
         },
         {
@@ -49,6 +55,7 @@ export default {
           name: 'Application 7',
           date: '2023-02-28',
           server: 1,
+          serverId: 'aBcDeFgHiJkLmNoPqRsTuVwXyZaBcDe',
           tasks: 2,
         },
         {
@@ -56,6 +63,7 @@ export default {
           name: 'Application 8',
           date: '2022-03-19',
           server: 4,
+          serverId: 'DeFgHiJkLmNoPqRsTuVwXyZaBcDeFgHi',
           tasks: 2,
         },
         {
@@ -63,6 +71,7 @@ export default {
           name: 'Application 9',
           date: '2021-10-20',
           server: 4,
+          serverId: 'DeFgHiJkLmNoPqRsTuVwXyZaBcDeFgHi',
           tasks: 1,
         },
         {
@@ -70,6 +79,7 @@ export default {
           name: 'Application 10',
           date: '2020-09-12',
           server: 5,
+          serverId: 'EfGhIjKlMnOpQrStUvWxYzAbCdEfGhIj',
           tasks: 3,
         },
         {
@@ -77,6 +87,7 @@ export default {
           name: 'Application 11',
           date: '2023-04-01',
           server: 2,
+          serverId: 'BcDeFgHiJkLmNoPqRsTuVwXyZaBcDeFg',
           tasks: 5,
         },
         {
@@ -84,6 +95,7 @@ export default {
           name: 'Application 12',
           date: '2022-05-30',
           server: 2,
+          serverId: 'BcDeFgHiJkLmNoPqRsTuVwXyZaBcDeFg',
           tasks: 0,
         },
       ],

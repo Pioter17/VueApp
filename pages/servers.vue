@@ -1,6 +1,6 @@
 <template>
   <v-row>
-    <v-col cols="2">
+    <!-- <v-col cols="2">
       <v-sheet rounded="lg">
         <v-list :rounded="true">
           <v-list-item link>Everything</v-list-item>
@@ -17,7 +17,7 @@
           ></v-list-item>
         </v-list>
       </v-sheet>
-    </v-col>
+    </v-col> -->
 
     <v-col style="border: 1px solid black">
       <v-sheet min-height="70vh" rounded="lg" style="border: 5px solid red">
@@ -57,7 +57,6 @@ export default {
   },
   methods: {
     showServer(id) {
-      // console.log('Clicked row:', item.id);
       this.$router.push('/details/servers/' + id);
     },
   },
