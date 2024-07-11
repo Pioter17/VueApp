@@ -1,23 +1,20 @@
 <template>
   <v-app id="inspire">
-    <v-app-bar style="border: 4px solid blue">
-      <v-container
-        class="d-flex align-center justify-center"
-        style="border: 5px solid green"
-      >
+    <v-app-bar dense class="d-flex align-center justify-center">
+      <v-container class="d-flex align-center justify-center" style="gap: 20px">
         <v-avatar class="me-4" color="grey-darken-1" size="32">
           <img src="@static/v.png" alt="vue" />
         </v-avatar>
 
         <router-link v-for="link in links" :key="link" :to="link.link">
-          <v-btn variant="text">
+          <v-btn variant="text" class="m-10">
             {{ link.title }}
           </v-btn>
         </router-link>
 
         <v-spacer></v-spacer>
 
-        <v-responsive max-width="160">
+        <!-- <v-responsive max-width="160">
           <v-text-field
             density="compact"
             label="Search"
@@ -27,12 +24,12 @@
             hide-details
             single-line
           ></v-text-field>
-        </v-responsive>
+        </v-responsive> -->
       </v-container>
     </v-app-bar>
 
-    <v-main class="bg-grey-lighten-3" style="height: 80vh">
-      <v-container style="border: 6px solid orange">
+    <v-main class="bg-grey-lighten-3" style="height: 90vh">
+      <v-container>
         <Nuxt />
       </v-container>
     </v-main>

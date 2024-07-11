@@ -1,48 +1,75 @@
 <template>
   <div class="wrapper">
-    <button @click="goBack">Go back</button>
-    <button v-if="!cameFromServers" @click="goToServers">Go to servers</button>
-    <h1>
-      {{ serverDetails.name }}
-    </h1>
-    <h2>Creation date: {{ serverDetails.date }}</h2>
-    <v-tabs v-model="tab">
-      <v-tab> Applications </v-tab>
-      <v-tab> Tasks </v-tab>
-    </v-tabs>
-
-    <v-tabs-items v-model="tab">
-      <v-tab-item>
-        <v-data-table
-          :headers="headers"
-          height="60vh"
-          :items="serverDetails.applications"
-        >
-          <template v-slot:item="{ item }">
-            <tr @click="showAppDetails(item.id)" class="clickable__row">
-              <td>{{ item.name }}</td>
-              <td>{{ item.date }}</td>
-              <td>{{ item.tasks }}</td>
-            </tr>
-          </template>
-        </v-data-table>
-      </v-tab-item>
-      <v-tab-item>
-        <v-data-table
-          :headers="headers"
-          height="60vh"
-          :items="serverDetails.tasks"
-        >
-          <template v-slot:item="{ item }">
-            <tr @click="showTaskDetails(item.id)" class="clickable__row">
-              <td>{{ item.name }}</td>
-              <td>{{ item.date }}</td>
-              <td>{{ item.application }}</td>
-            </tr>
-          </template>
-        </v-data-table>
-      </v-tab-item>
-    </v-tabs-items>
+    <v-card
+      outlined
+      elevation="10"
+      width="1200px"
+      height="750px"
+      class="mx-auto mt-16 pa-8"
+    >
+      <v-row class="d-flex justify-space-between mb-12">
+        <div class="d-flex flex-column">
+          <v-card-actions class="d-flex align-center" style="gap: 20px">
+            <v-btn @click="goBack">Go back</v-btn>
+            <v-btn v-if="!cameFromServers" @click="goToServers">
+              Go to servers
+            </v-btn>
+          </v-card-actions>
+          <v-card-title primary-title class="text-h2 mb-4">
+            {{ serverDetails.name }}
+          </v-card-title>
+          <v-card-subtitle class="text-h5">
+            Creation date: {{ serverDetails.date }}
+          </v-card-subtitle>
+        </div>
+        <div height="200" class="d-flex align-center">
+          <v-card-actions
+            class="action__buttons d-flex flex-column align-center justify-center"
+          >
+            <v-btn color="info" block large>UPDATE SERVER</v-btn>
+            <v-btn color="error" class="ml-0" block large>DELETE SERVER</v-btn>
+          </v-card-actions>
+        </div>
+      </v-row>
+      <v-row>
+        <v-tabs v-model="tab" grow>
+          <v-tab> Applications </v-tab>
+          <v-tab> Tasks </v-tab>
+        </v-tabs>
+        <v-tabs-items class="full__width" v-model="tab">
+          <v-tab-item>
+            <v-data-table
+              :headers="appHeaders"
+              height="350px"
+              :items="serverDetails.applications"
+            >
+              <template v-slot:item="{ item }">
+                <tr @click="showAppDetails(item.id)" class="clickable__row">
+                  <td>{{ item.name }}</td>
+                  <td>{{ item.date }}</td>
+                  <td>{{ item.tasks }}</td>
+                </tr>
+              </template>
+            </v-data-table>
+          </v-tab-item>
+          <v-tab-item>
+            <v-data-table
+              :headers="taskHeaders"
+              height="350px"
+              :items="serverDetails.tasks"
+            >
+              <template v-slot:item="{ item }">
+                <tr @click="showTaskDetails(item.id)" class="clickable__row">
+                  <td>{{ item.name }}</td>
+                  <td>{{ item.date }}</td>
+                  <td>{{ item.application }}</td>
+                </tr>
+              </template>
+            </v-data-table>
+          </v-tab-item>
+        </v-tabs-items>
+      </v-row>
+    </v-card>
   </div>
 </template>
 
@@ -52,10 +79,15 @@ export default {
     return {
       tab: 0,
       cameFromServers: false,
-      headers: [
+      taskHeaders: [
         { text: 'Name', value: 'name' },
         { text: 'Date', value: 'date' },
         { text: 'Application', value: 'application' },
+      ],
+      appHeaders: [
+        { text: 'Name', value: 'name' },
+        { text: 'Date', value: 'date' },
+        { text: 'Tasks', value: 'tasks' },
       ],
     };
   },
@@ -111,4 +143,13 @@ export default {
 };
 </script>
 
-<style></style>
+<style>
+.action__buttons {
+  gap: 20px;
+  width: 300px;
+}
+
+.full__width {
+  width: 100%;
+}
+</style>

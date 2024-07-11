@@ -1,0 +1,37 @@
+[
+  {
+    "id": "VvnqzKsqNYcocLnHfTsuSBUPYYiCUp",
+    "name": "Server 1",
+    "date": "2023-06-15",
+    "applications": 4,
+    "tasks": 10
+  },
+  {
+    "id": "oIWoYESJAhBelvPlXpDnillIOnFiao",
+    "name": "Server 2",
+    "date": "2022-11-23",
+    "applications": 3,
+    "tasks": 7
+  },
+  {
+    "id": "acKeFOIxjoxkaEZuvbVpAKIdwatHll",
+    "name": "Server 3",
+    "date": "2021-04-10",
+    "applications": 2,
+    "tasks": 6
+  },
+  {
+    "id": "VEiJHCDgpCjvHXytmUaxDqEFIGrvFM",
+    "name": "Server 4",
+    "date": "2020-08-19",
+    "applications": 2,
+    "tasks": 4
+  },
+  {
+    "id": "TcuQouJPaUASSvXKoRtuCBugIJdRLu",
+    "name": "Server 5",
+    "date": "2023-01-05",
+    "applications": 1,
+    "tasks": 3
+  }
+]
