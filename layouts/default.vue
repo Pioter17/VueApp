@@ -6,7 +6,7 @@
           <img src="@static/v.png" alt="vue" />
         </v-avatar>
 
-        <router-link v-for="link in links" :key="link" :to="link.link">
+        <router-link v-for="link in links" :key="link.title" :to="link.link">
           <v-btn variant="text" class="m-10">
             {{ link.title }}
           </v-btn>

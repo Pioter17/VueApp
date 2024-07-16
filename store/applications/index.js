@@ -11,4 +11,14 @@ export default {
       return state.applications;
     },
   },
+  mutations: {
+    // addApplication(state, payload) {
+    //   state.tasks.push(payload.newItem);
+    // },
+  },
+  actions: {
+    // saveApplication(context, newItem) {
+    //   context.commit('addTask', { newItem: newItem });
+    // },
+  },
 };

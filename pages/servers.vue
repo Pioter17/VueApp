@@ -4,7 +4,7 @@
       <v-sheet
         outlined
         elevation="10"
-        width="70vw"
+        width="90vw"
         min-height="70vh"
         rounded="lg"
         class="pa-14 mt-16"
@@ -88,12 +88,13 @@
               </v-dialog>
             </v-toolbar>
           </template>
-          <template v-slot:item="{ item }">
+          <template v-slot:item="{ item, index }">
             <tr @click="showServer(item.id)" class="clickable__row">
               <td>{{ item.name }}</td>
               <td>{{ item.date }}</td>
-              <td>{{ item.applications }}</td>
-              <td>{{ item.tasks }}</td>
+              <td>{{ item.edition_date }}</td>
+              <td>{{ applications[index] }}</td>
+              <td>{{ tasks[index] }}</td>
               <td>
                 <v-icon small class="mr-2" @click.stop="editItem(item)">
                   mdi-pencil
@@ -107,8 +108,6 @@
           <template v-slot:no-data>
             <v-btn color="primary" @click="initialize"> Reset </v-btn>
           </template>
-          <!-- <template v-slot:item="{ item }">
-          </template> -->
         </v-data-table>
       </v-sheet>
     </v-col>
@@ -124,9 +123,10 @@ export default {
       name: 'Servers Page',
       headers: [
         { text: 'Name', value: 'name' },
-        { text: 'Date', value: 'date' },
-        { text: 'Applications', value: 'applications' },
-        { text: 'Tasks', value: 'tasks' },
+        { text: 'Creation date', value: 'date' },
+        { text: 'Edition date', value: 'edition_date' },
+        { text: 'Applications' },
+        { text: 'Tasks' },
         { text: 'Actions', value: 'actions', sortable: false },
       ],
       desserts: [],
@@ -153,6 +153,20 @@ export default {
     },
     formTitle() {
       return this.editedIndex === -1 ? 'New Item' : 'Edit Item';
+    },
+    applications() {
+      return this.servers.map((server) => {
+        return this.$store.getters.getApps.filter(
+          (app) => app.serverId == server.id
+        ).length;
+      });
+    },
+    tasks() {
+      return this.servers.map((server) => {
+        return this.$store.getters.getTasks.filter(
+          (task) => task.serverId == server.id
+        ).length;
+      });
     },
   },
   watch: {

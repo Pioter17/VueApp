@@ -18,8 +18,11 @@
           <v-card-title primary-title class="text-h2 mb-4">
             {{ appDetails.name }}
           </v-card-title>
-          <v-card-subtitle class="text-h5">
+          <v-card-subtitle class="text-h5 mt-6">
             Creation date: {{ appDetails.date }}
+          </v-card-subtitle>
+          <v-card-subtitle class="text-h5">
+            Edition date: {{ appDetails.edition_date }}
           </v-card-subtitle>
           <v-card-text>
             <nuxt-link
@@ -31,13 +34,14 @@
           </v-card-text>
           <v-data-table
             :headers="headers"
-            height="350px"
+            height="250px"
             :items="appDetails.tasks"
           >
             <template v-slot:item="{ item }">
               <tr @click="showTaskDetails(item.id)" class="clickable__row">
                 <td>{{ item.name }}</td>
                 <td>{{ item.date }}</td>
+                <td>{{ item.edition_date }}</td>
                 <td>{{ item.server }}</td>
               </tr>
             </template>
@@ -68,6 +72,7 @@ export default {
       headers: [
         { text: 'Name', value: 'name', width: '25px' },
         { text: 'Creation date', value: 'date', width: '75px' },
+        { text: 'Edition date', value: 'edition_date', width: '75px' },
         { text: 'Server', value: 'server', width: '25px' },
       ],
     };
@@ -93,14 +98,13 @@ export default {
   },
   computed: {
     appDetails() {
-      console.log(this.$route.params);
       const application = this.$store.getters.getApps.find(
         (app) => app.id == this.$route.params.id
       );
-      console.log(this.getTasksList(application.id));
       return {
         name: application.name,
         date: application.date,
+        edition_date: application.edition_date,
         server: application.server,
         serverId: application.serverId,
         tasks: this.getTasksList(application.id),

@@ -18,8 +18,11 @@
           <v-card-title primary-title class="text-h2 mb-4">
             {{ serverDetails.name }}
           </v-card-title>
-          <v-card-subtitle class="text-h5">
+          <v-card-subtitle class="text-h5 mt-2">
             Creation date: {{ serverDetails.date }}
+          </v-card-subtitle>
+          <v-card-subtitle class="text-h5">
+            Edition date: {{ serverDetails.edition_date }}
           </v-card-subtitle>
         </div>
         <div height="200" class="d-flex align-center">
@@ -40,13 +43,14 @@
           <v-tab-item>
             <v-data-table
               :headers="appHeaders"
-              height="350px"
+              height="250px"
               :items="serverDetails.applications"
             >
               <template v-slot:item="{ item }">
                 <tr @click="showAppDetails(item.id)" class="clickable__row">
                   <td>{{ item.name }}</td>
                   <td>{{ item.date }}</td>
+                  <td>{{ item.edition_date }}</td>
                   <td>{{ item.tasks }}</td>
                 </tr>
               </template>
@@ -55,14 +59,21 @@
           <v-tab-item>
             <v-data-table
               :headers="taskHeaders"
-              height="350px"
+              height="250px"
               :items="serverDetails.tasks"
             >
               <template v-slot:item="{ item }">
                 <tr @click="showTaskDetails(item.id)" class="clickable__row">
                   <td>{{ item.name }}</td>
                   <td>{{ item.date }}</td>
-                  <td>{{ item.application }}</td>
+                  <td>{{ item.edition_date }}</td>
+                  <td>
+                    {{
+                      item.application
+                        ? item.application
+                        : 'Nie przypisano do aplikacji'
+                    }}
+                  </td>
                 </tr>
               </template>
             </v-data-table>
@@ -81,12 +92,14 @@ export default {
       cameFromServers: false,
       taskHeaders: [
         { text: 'Name', value: 'name' },
-        { text: 'Date', value: 'date' },
+        { text: 'Creation Date', value: 'date' },
+        { text: 'Edition date', value: 'edition_date' },
         { text: 'Application', value: 'application' },
       ],
       appHeaders: [
         { text: 'Name', value: 'name' },
-        { text: 'Date', value: 'date' },
+        { text: 'Creation date', value: 'date' },
+        { text: 'Edition date', value: 'edition_date' },
         { text: 'Tasks', value: 'tasks' },
       ],
     };
@@ -126,6 +139,7 @@ export default {
       return {
         name: server.name,
         date: server.date,
+        edition_date: server.edition_date,
         applications: this.getApplicationsList(server.id),
         tasks: this.getTasksList(server.id),
       };

@@ -11,4 +11,14 @@ export default {
       return state.servers;
     },
   },
+  mutations: {
+    // addServer(state, payload) {
+    //   state.tasks.push(payload.newItem);
+    // },
+  },
+  actions: {
+    // saveServer(context, newItem) {
+    //   context.commit('addTask', { newItem: newItem });
+    // },
+  },
 };

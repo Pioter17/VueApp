@@ -3,6 +3,7 @@
     "id": "AzTaTgldjZsGMjOBLuYwppOYGtnzCL",
     "name": "Application 1",
     "date": "2022-07-15",
+    "edition_date": "2022-07-15",
     "server": 1,
     "serverId": "VvnqzKsqNYcocLnHfTsuSBUPYYiCUp",
     "tasks": 5
@@ -11,6 +12,7 @@
     "id": "sPrEfFTqiTXMRSvPQDseaaqupdIlzb",
     "name": "Application 2",
     "date": "2021-11-23",
+    "edition_date": "2022-07-15",
     "server": 1,
     "serverId": "VvnqzKsqNYcocLnHfTsuSBUPYYiCUp",
     "tasks": 3
@@ -19,6 +21,7 @@
     "id": "SijRGJxANyUaMbedmfMirCuRulvONe",
     "name": "Application 3",
     "date": "2020-04-10",
+    "edition_date": "2022-07-15",
     "server": 1,
     "serverId": "VvnqzKsqNYcocLnHfTsuSBUPYYiCUp",
     "tasks": 2
@@ -27,6 +30,7 @@
     "id": "JRoFhMMLvmiEXqPSiMrjLmpXwgZSUB",
     "name": "Application 4",
     "date": "2023-08-19",
+    "edition_date": "2022-07-15",
     "server": 1,
     "serverId": "VvnqzKsqNYcocLnHfTsuSBUPYYiCUp",
     "tasks": 0
@@ -35,6 +39,7 @@
     "id": "TFxbFfgRPMdpYefxsVCyUiDfFBMknf",
     "name": "Application 5",
     "date": "2021-01-05",
+    "edition_date": "2022-07-15",
     "server": 2,
     "serverId": "oIWoYESJAhBelvPlXpDnillIOnFiao",
     "tasks": 3
@@ -43,6 +48,7 @@
     "id": "GPQPfPNauvjkBxwnqGqqkLnvycjkEP",
     "name": "Application 6",
     "date": "2020-06-15",
+    "edition_date": "2022-07-15",
     "server": 2,
     "serverId": "oIWoYESJAhBelvPlXpDnillIOnFiao",
     "tasks": 2
@@ -51,6 +57,7 @@
     "id": "XOFwnwWsLEuuxNblRtBDatHaJmBofr",
     "name": "Application 7",
     "date": "2023-02-28",
+    "edition_date": "2022-07-15",
     "server": 2,
     "serverId": "oIWoYESJAhBelvPlXpDnillIOnFiao",
     "tasks": 2
@@ -59,6 +66,7 @@
     "id": "GRzsxOxvslSFhraoEEsAwNiZPhAoJF",
     "name": "Application 8",
     "date": "2022-03-19",
+    "edition_date": "2022-07-15",
     "server": 3,
     "serverId": "acKeFOIxjoxkaEZuvbVpAKIdwatHll",
     "tasks": 4
@@ -67,6 +75,7 @@
     "id": "xLQwLRhBkSvIQJodopjzDVYujqhwov",
     "name": "Application 9",
     "date": "2021-10-20",
+    "edition_date": "2022-07-15",
     "server": 3,
     "serverId": "acKeFOIxjoxkaEZuvbVpAKIdwatHll",
     "tasks": 1
@@ -75,6 +84,7 @@
     "id": "pBwTgVRNisCovlaAxZZDpxpsRCBCGf",
     "name": "Application 10",
     "date": "2020-09-12",
+    "edition_date": "2022-07-15",
     "server": 4,
     "serverId": "VEiJHCDgpCjvHXytmUaxDqEFIGrvFM",
     "tasks": 1
@@ -83,6 +93,7 @@
     "id": "eyDpJVdcDnxAihMNUajSTBSolizZMZ",
     "name": "Application 11",
     "date": "2023-04-01",
+    "edition_date": "2022-07-15",
     "server": 4,
     "serverId": "VEiJHCDgpCjvHXytmUaxDqEFIGrvFM",
     "tasks": 2
@@ -91,6 +102,7 @@
     "id": "MBoZIjKaLSJeYpaPGfPGVyPLDfZISE",
     "name": "Application 12",
     "date": "2022-05-30",
+    "edition_date": "2022-07-10",
     "server": 5,
     "serverId": "TcuQouJPaUASSvXKoRtuCBugIJdRLu",
     "tasks": 3

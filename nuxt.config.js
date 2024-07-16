@@ -75,6 +75,8 @@ export default {
     '@pages': resolve(__dirname, './pages'),
     '@store': resolve(__dirname, './store'),
     '@assets': resolve(__dirname, './assets'),
+    '@UI': resolve(__dirname, './UI'),
+    '@utils': resolve(__dirname, './utils'),
     '@static': resolve(__dirname, './static'),
   },
 
