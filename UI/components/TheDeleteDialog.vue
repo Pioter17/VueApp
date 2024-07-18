@@ -1,9 +1,12 @@
 <template>
-  <v-dialog v-model="dialogDelete" max-width="500px">
+  <v-dialog v-model="dialogDelete" max-width="700px" max-height="400px">
     <v-card>
-      <v-card-title class="text-h5"
-        >Are you sure you want to delete {{ itemName }}?</v-card-title
-      >
+      <v-card-title class="text-h5">
+        Are you sure you want to delete {{ itemName }}?
+      </v-card-title>
+      <v-card-subtitle class="mt-2">
+        <slot></slot>
+      </v-card-subtitle>
       <v-card-actions>
         <v-spacer></v-spacer>
         <v-btn color="blue darken-1" text @click="closeDelete">Cancel</v-btn>

@@ -21,6 +21,25 @@ export default {
     removeTask(state, payload) {
       state.tasks = state.tasks.filter((task) => task.id != payload.taskId);
     },
+    detachTasksFromApplication(state, payload) {
+      state.tasks.forEach((task) => {
+        if (task.applicationId == payload.appId) {
+          task.application = null;
+          task.applicationId = null;
+        }
+      });
+    },
+    reattachTasksToNewApplication(state, payload) {
+      payload.newItem.tasks.forEach((newTask) => {
+        state.tasks.forEach((task) => {
+          if (task.id == newTask.id) {
+            task.application = payload.newItem.name;
+            task.applicationId = payload.newItem.id;
+            return;
+          }
+        });
+      });
+    },
   },
   actions: {
     saveTask(context, newItem) {

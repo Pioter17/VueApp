@@ -12,13 +12,39 @@ export default {
     },
   },
   mutations: {
-    // addApplication(state, payload) {
-    //   state.tasks.push(payload.newItem);
-    // },
+    addApplication(state, payload) {
+      payload.newItem.tasks = payload.newItem.tasks.length;
+      state.applications.push(payload.newItem);
+    },
+    putApplication(state, payload) {
+      state.applications.splice(payload.index, 1, payload.newItem);
+    },
+    removeApplication(state, payload) {
+      state.applications = state.applications.filter(
+        (app) => app.id != payload.appId
+      );
+    },
   },
   actions: {
-    // saveApplication(context, newItem) {
-    //   context.commit('addTask', { newItem: newItem });
-    // },
+    saveApplication(context, newItem) {
+      context.commit('reattachTasksToNewApplication', {
+        newItem: newItem,
+      });
+      context.commit('addApplication', { newItem: newItem });
+    },
+    updateApplication(context, payload) {
+      context.commit('detachTasksFromApplication', { appId: payload.index });
+      context.commit('reattachTasksToNewApplication', {
+        newItem: payload.newItem,
+      });
+      context.commit('putApplication', {
+        newItem: payload.newItem,
+        index: payload.index,
+      });
+    },
+    deleteApplication(context, appId) {
+      context.commit('removeApplication', { appId: appId });
+      context.commit('detachTasksFromApplication', { appId: appId });
+    },
   },
 };

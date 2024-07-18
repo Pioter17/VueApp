@@ -9,9 +9,6 @@
       <add-new-task-form
         ref="formComponent"
         :editedItem="editedItem"
-        :applications="applications"
-        :servers="servers"
-        @server-changed="updateApplications"
       ></add-new-task-form>
     </the-form-dialog>
     <the-delete-dialog
@@ -95,12 +92,16 @@ export default {
       cameFromTasks: false,
       dialogDelete: false,
       dialog: false,
-      applications: [],
       headers: [
         { text: 'Name', value: 'name' },
         { text: 'Date', value: 'date' },
         { text: 'Application', value: 'application' },
       ],
+      editedItem: {
+        itemName: '',
+        attachedServer: null,
+        attachedApplication: null,
+      },
     };
   },
   computed: {
@@ -110,23 +111,13 @@ export default {
       );
       return task;
     },
-    editedItem() {
-      if (this.taskDetails) {
-        return {
-          itemName: this.taskDetails.name,
-          attachedServer: this.$store.getters.getServers.find(
-            (server) => server.id == this.taskDetails.serverId
-          ),
-          attachedApplication: this.$store.getters.getApps.find(
-            (application) => application.id == this.taskDetails.applicationId
-          ),
-        };
-      } else {
-        return {};
-      }
-    },
     servers() {
       return this.$store.getters.getServers;
+    },
+  },
+  watch: {
+    taskDetails(newValue) {
+      this.updateEditedItem(newValue);
     },
   },
   methods: {
@@ -155,13 +146,23 @@ export default {
     updateTask() {
       this.dialog = true;
     },
-    updateApplications() {
-      if (this.editedItem.attachedServer != null) {
-        this.applications = this.$store.getters.getApps.filter(
-          (app) => app.serverId == this.editedItem.attachedServer.id
-        );
+    updateEditedItem(newValue) {
+      if (newValue != null) {
+        this.editedItem = {
+          itemName: newValue.name,
+          attachedServer: this.$store.getters.getServers.find(
+            (server) => server.id == newValue.serverId
+          ),
+          attachedApplication: this.$store.getters.getApps.find(
+            (application) => application.id == newValue.applicationId
+          ),
+        };
       } else {
-        this.applications = [];
+        this.editedItem = {
+          itemName: '',
+          attachedServer: null,
+          attachedApplication: null,
+        };
       }
     },
     save() {
@@ -199,9 +200,7 @@ export default {
     });
   },
   mounted() {
-    this.updateApplications();
+    this.updateEditedItem(this.taskDetails);
   },
 };
 </script>
-
-<style></style>

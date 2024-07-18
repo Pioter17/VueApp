@@ -26,8 +26,6 @@
                 <add-new-task-form
                   ref="formComponent"
                   :editedItem="editedItem"
-                  :applications="applications"
-                  :servers="servers"
                 ></add-new-task-form>
               </the-form-dialog>
               <the-delete-dialog
@@ -104,18 +102,6 @@ export default {
   computed: {
     items() {
       return this.$store.getters.getTasks;
-    },
-    servers() {
-      return this.$store.getters.getServers;
-    },
-    applications() {
-      if (this.editedItem.attachedServer != null) {
-        return this.$store.getters.getApps.filter(
-          (app) => app.serverId == this.editedItem.attachedServer.id
-        );
-      } else {
-        return [];
-      }
     },
   },
   methods: {

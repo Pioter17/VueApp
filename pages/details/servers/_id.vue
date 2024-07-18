@@ -5,7 +5,7 @@
       elevation="10"
       width="1200px"
       height="750px"
-      class="mx-auto mt-16 pa-8"
+      class="mx-auto mt-16 pa-10"
     >
       <v-row class="d-flex justify-space-between mb-12">
         <div class="d-flex flex-column">
@@ -157,7 +157,7 @@ export default {
 };
 </script>
 
-<style>
+<style scoped>
 .action__buttons {
   gap: 20px;
   width: 300px;
