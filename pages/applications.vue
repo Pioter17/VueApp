@@ -16,7 +16,8 @@
 </template>
 
 <script>
-import { generateID } from './utils/functions/id-generator';
+import { generateID } from '@pages/utils/functions/id-generator';
+import { applicationsHeaders } from '@core/constants/headers';
 import TheOverview from '@UI/components/TheOverview.vue';
 
 export default {
@@ -26,14 +27,7 @@ export default {
       isNew: true,
       warningMessage:
         'WARNING! This action will detach all tasks attached to this application!',
-      headers: [
-        { text: 'Name', value: 'name' },
-        { text: 'Creation date', value: 'date' },
-        { text: 'Edition date', value: 'edition_date' },
-        { text: 'Server', value: 'server' },
-        { text: 'Tasks' },
-        { text: ' ' },
-      ],
+      headers: applicationsHeaders,
       editedIndex: -1,
       editedItem: {
         itemName: '',
@@ -52,7 +46,6 @@ export default {
       backLink: '/details/applications/',
       itemType: 'Application',
       headers: this.headers,
-      filterFunction: this.filterApplications,
     };
   },
   computed: {
@@ -87,17 +80,6 @@ export default {
     },
     secondLastColumn(item) {
       return item.server;
-    },
-    filterApplications(data, serverName, applicationName, taskName) {
-      return data.filter((item) => {
-        const searchApplicationNameMatch = item.name
-          .toLowerCase()
-          .includes(applicationName.toLowerCase());
-        const searchServerNameMatch = item.server
-          .toLowerCase()
-          .includes(serverName.toLowerCase());
-        return searchApplicationNameMatch && searchServerNameMatch;
-      });
     },
     editItem(item) {
       this.editedIndex = this.apps.indexOf(item);

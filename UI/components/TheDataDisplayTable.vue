@@ -58,8 +58,10 @@
 </template>
 
 <script>
+import { filterData } from '@pages/utils/functions/data-filter';
+
 export default {
-  inject: ['headers', 'itemType', 'backLink', 'filterFunction'],
+  inject: ['headers', 'itemType', 'backLink'],
   props: ['openDialog', 'data', 'lastColumn', 'secondLastColumn'],
   $emits: ['open-delete', 'open-form'],
   data() {
@@ -71,7 +73,7 @@ export default {
   },
   computed: {
     filteredData() {
-      return this.filterFunction(
+      return filterData(
         this.data,
         this.searchServer,
         this.searchApplication,

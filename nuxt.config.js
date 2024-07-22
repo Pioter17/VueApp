@@ -76,8 +76,8 @@ export default {
     '@store': resolve(__dirname, './store'),
     '@assets': resolve(__dirname, './assets'),
     '@UI': resolve(__dirname, './UI'),
-    '@utils': resolve(__dirname, './utils'),
     '@static': resolve(__dirname, './static'),
+    '@core': resolve(__dirname, './core'),
   },
 
   // Build Configuration: https://go.nuxtjs.dev/config-build

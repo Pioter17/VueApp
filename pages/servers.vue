@@ -16,7 +16,8 @@
 </template>
 
 <script>
-import { generateID } from './utils/functions/id-generator';
+import { generateID } from '@pages/utils/functions/id-generator';
+import { serversHeaders } from '@core/constants/headers';
 import TheOverview from '@UI/components/TheOverview.vue';
 
 export default {
@@ -27,14 +28,7 @@ export default {
       warningMessage: `WARNING! This action will DELETE all applications and tasks attached to this server!\n
         Consider reattaching them first.
         Are you sure to delete this server?`,
-      headers: [
-        { text: 'Name', value: 'name' },
-        { text: 'Creation date', value: 'date' },
-        { text: 'Edition date', value: 'edition_date' },
-        { text: 'Applications' },
-        { text: 'Tasks' },
-        { text: ' ', value: 'actions', sortable: false },
-      ],
+      headers: serversHeaders,
       editedIndex: -1,
       editedItem: {
         itemName: '',
@@ -49,7 +43,6 @@ export default {
       backLink: '/details/servers/',
       itemType: 'Server',
       headers: this.headers,
-      filterFunction: this.filterServers,
     };
   },
   computed: {
@@ -88,14 +81,6 @@ export default {
     },
     secondLastColumn(item) {
       return this.applications[item.count];
-    },
-    filterServers(data, serverName, applicationName, taskName) {
-      return data.filter((item) => {
-        const searchServerNameMatch = item.name
-          .toLowerCase()
-          .includes(serverName.toLowerCase());
-        return searchServerNameMatch;
-      });
     },
     editItem(item) {
       this.editedIndex = this.servers.indexOf(item);

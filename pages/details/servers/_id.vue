@@ -112,6 +112,10 @@
 import TheDeleteDialog from '@UI/components/TheDeleteDialog.vue';
 import TheFormDialog from '@UI/components/TheFormDialog.vue';
 import addNewServerForm from '@components/addNewServerForm.vue';
+import {
+  serverDetailsTasksHeaders,
+  serverDetailsApplicationsHeaders,
+} from '@core/constants/headers';
 
 export default {
   components: { TheDeleteDialog, TheFormDialog, addNewServerForm },
@@ -124,18 +128,8 @@ export default {
       cameFromServers: false,
       dialogDelete: false,
       dialog: false,
-      taskHeaders: [
-        { text: 'Name', value: 'name' },
-        { text: 'Creation Date', value: 'date' },
-        { text: 'Edition date', value: 'edition_date' },
-        { text: 'Application', value: 'application' },
-      ],
-      appHeaders: [
-        { text: 'Name', value: 'name' },
-        { text: 'Creation date', value: 'date' },
-        { text: 'Edition date', value: 'edition_date' },
-        { text: 'Tasks', value: 'tasks' },
-      ],
+      taskHeaders: serverDetailsTasksHeaders,
+      appHeaders: serverDetailsApplicationsHeaders,
       editedItem: {
         itemName: '',
       },

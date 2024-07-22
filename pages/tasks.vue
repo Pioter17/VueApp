@@ -16,23 +16,16 @@
 </template>
 
 <script>
-import { generateID } from './utils/functions/id-generator';
+import { generateID } from '@pages/utils/functions/id-generator';
+import { tasksHeaders } from '@core/constants/headers';
 import TheOverview from '@UI/components/TheOverview.vue';
-import AddNewTaskForm from '@components/addNewTaskForm.vue';
 
 export default {
-  components: { TheOverview, AddNewTaskForm },
+  components: { TheOverview },
   data() {
     return {
       isNew: true,
-      headers: [
-        { text: 'Name', value: 'name' },
-        { text: 'Creation date', value: 'date' },
-        { text: 'Edition date', value: 'edition_date' },
-        { text: 'Server', value: 'server' },
-        { text: 'Application', value: 'application' },
-        { text: ' ' },
-      ],
+      headers: tasksHeaders,
       editedIndex: -1,
       editedItem: {
         itemName: '',
@@ -51,7 +44,6 @@ export default {
       backLink: '/details/tasks/',
       itemType: 'Task',
       headers: this.headers,
-      filterFunction: this.filterTasks,
     };
   },
   computed: {
@@ -74,24 +66,6 @@ export default {
     },
     secondLastColumn(item) {
       return item.server;
-    },
-    filterTasks(data, serverName, applicationName, taskName) {
-      return data.filter((item) => {
-        const searchApplicationNameMatch = String(item.application)
-          .toLowerCase()
-          .includes(applicationName.toLowerCase());
-        const searchServerNameMatch = String(item.server)
-          .toLowerCase()
-          .includes(serverName.toLowerCase());
-        const searchTaskNameMatch = item.name
-          .toLowerCase()
-          .includes(taskName.toLowerCase());
-        return (
-          searchApplicationNameMatch &&
-          searchServerNameMatch &&
-          searchTaskNameMatch
-        );
-      });
     },
     editItem(item) {
       this.editedIndex = this.items.indexOf(item);

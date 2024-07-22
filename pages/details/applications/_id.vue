@@ -98,6 +98,7 @@
 import TheDeleteDialog from '@UI/components/TheDeleteDialog.vue';
 import TheFormDialog from '@UI/components/TheFormDialog.vue';
 import addNewAppForm from '@components/addNewAppForm.vue';
+import { applicationDetailsHeaders } from '@core/constants/headers';
 
 export default {
   components: { TheDeleteDialog, TheFormDialog, addNewAppForm },
@@ -109,12 +110,7 @@ export default {
       cameFromApplications: false,
       dialogDelete: false,
       dialog: false,
-      headers: [
-        { text: 'Name', value: 'name' },
-        { text: 'Creation date', value: 'date' },
-        { text: 'Edition date', value: 'edition_date' },
-        { text: 'Server', value: 'server' },
-      ],
+      headers: applicationDetailsHeaders,
       editedItem: {
         itemName: '',
         attachedServer: null,
