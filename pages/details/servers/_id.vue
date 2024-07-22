@@ -1,5 +1,25 @@
 <template>
   <div class="wrapper">
+    <the-form-dialog
+      @cancel-close="close"
+      @save-new-item="save"
+      item-type="Server"
+      :dialog="dialog"
+      :isNew="false"
+    >
+      <add-new-server-form
+        ref="formComponent"
+        :editedItem="editedItem"
+      ></add-new-server-form>
+    </the-form-dialog>
+    <the-delete-dialog
+      @cancel-delete="closeDelete"
+      @delete-confirm="deleteConfirm"
+      :dialogDelete="dialogDelete"
+      :itemName="serverDetails.name"
+    >
+      {{ warningMessage }}
+    </the-delete-dialog>
     <v-card
       outlined
       elevation="10"
@@ -29,8 +49,12 @@
           <v-card-actions
             class="action__buttons d-flex flex-column align-center justify-center"
           >
-            <v-btn color="info" block large>UPDATE SERVER</v-btn>
-            <v-btn color="error" class="ml-0" block large>DELETE SERVER</v-btn>
+            <v-btn color="info" block large @click="updateServer">
+              UPDATE SERVER
+            </v-btn>
+            <v-btn color="error" class="ml-0" block large @click="deleteServer">
+              DELETE SERVER
+            </v-btn>
           </v-card-actions>
         </div>
       </v-row>
@@ -85,11 +109,21 @@
 </template>
 
 <script>
+import TheDeleteDialog from '@UI/components/TheDeleteDialog.vue';
+import TheFormDialog from '@UI/components/TheFormDialog.vue';
+import addNewServerForm from '@components/addNewServerForm.vue';
+
 export default {
+  components: { TheDeleteDialog, TheFormDialog, addNewServerForm },
   data() {
     return {
       tab: 0,
+      warningMessage: `WARNING! This action will DELETE all applications and tasks attached to this server!\n
+        Consider reattaching them first.
+        Are you sure to delete this server?`,
       cameFromServers: false,
+      dialogDelete: false,
+      dialog: false,
       taskHeaders: [
         { text: 'Name', value: 'name' },
         { text: 'Creation Date', value: 'date' },
@@ -102,13 +136,42 @@ export default {
         { text: 'Edition date', value: 'edition_date' },
         { text: 'Tasks', value: 'tasks' },
       ],
+      editedItem: {
+        itemName: '',
+      },
     };
+  },
+  computed: {
+    serverDetails() {
+      const server = this.$store.getters.getServers.find(
+        (server) => server.id == this.$route.params.id
+      );
+      return {
+        id: server.id,
+        name: server.name,
+        date: server.date,
+        edition_date: server.edition_date,
+        applications: this.getApplicationsList(server.id),
+        tasks: this.getTasksList(server.id),
+      };
+    },
+  },
+  watch: {
+    serverDetails(newValue) {
+      this.updateEditedItem(newValue);
+    },
   },
   methods: {
     getApplicationsList(serverId) {
-      return this.$store.getters.getApps.filter(
+      const apps = this.$store.getters.getApps.filter(
         (app) => app.serverId == serverId
       );
+      apps.forEach((app) => {
+        app.tasks = this.$store.getters.getTasks.filter(
+          (task) => task.applicationId == app.id
+        ).length;
+      });
+      return apps;
     },
     getTasksList(serverId) {
       return this.$store.getters.getTasks.filter(
@@ -130,19 +193,50 @@ export default {
     setCameFromServers(value) {
       this.cameFromServers = value;
     },
-  },
-  computed: {
-    serverDetails() {
-      const server = this.$store.getters.getServers.find(
-        (server) => server.id == this.$route.params.id
-      );
-      return {
-        name: server.name,
-        date: server.date,
-        edition_date: server.edition_date,
-        applications: this.getApplicationsList(server.id),
-        tasks: this.getTasksList(server.id),
-      };
+    deleteServer() {
+      this.dialogDelete = true;
+    },
+    deleteConfirm() {
+      this.$store.dispatch('deleteServer', this.serverDetails.id);
+      this.$router.back();
+    },
+    closeDelete() {
+      this.dialogDelete = false;
+    },
+    close() {
+      this.dialog = false;
+    },
+    updateServer() {
+      this.dialog = true;
+    },
+    updateEditedItem(newValue) {
+      if (newValue != null) {
+        this.editedItem = {
+          itemName: newValue.name,
+        };
+      } else {
+        this.editedItem = {
+          itemName: '',
+        };
+      }
+    },
+    save() {
+      const isValid = this.$refs.formComponent.validateForm();
+      if (isValid) {
+        const serverToUpdate = {
+          id: this.serverDetails.id,
+          name: this.editedItem.itemName,
+          date: this.serverDetails.date,
+          edition_date: new Date().toISOString().split('T')[0],
+        };
+        this.$store.dispatch('updateServer', {
+          newItem: serverToUpdate,
+          index: this.$store.getters.getServers.findIndex(
+            (server) => server.id == this.serverDetails.id
+          ),
+        });
+        this.close();
+      }
     },
   },
   beforeRouteEnter(_, from, next) {
@@ -153,6 +247,9 @@ export default {
         vm.setCameFromServers(false);
       }
     });
+  },
+  mounted() {
+    this.updateEditedItem(this.serverDetails);
   },
 };
 </script>

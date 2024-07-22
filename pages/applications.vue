@@ -11,6 +11,7 @@
     :lastColumn="lastColumn"
     :secondLastColumn="secondLastColumn"
     :warning="warningMessage"
+    :isNew="isNew"
   ></the-overview>
 </template>
 
@@ -22,6 +23,7 @@ export default {
   components: { TheOverview },
   data() {
     return {
+      isNew: true,
       warningMessage:
         'WARNING! This action will detach all tasks attached to this application!',
       headers: [
@@ -60,6 +62,9 @@ export default {
       data.forEach((element) => {
         element = {
           ...element,
+          server: this.$store.getters.getServers.find(
+            (server) => server.id == element.serverId
+          ).name,
           count: i,
         };
         newData.push(element);
@@ -84,6 +89,9 @@ export default {
     },
     editItem(item) {
       this.editedIndex = this.apps.indexOf(item);
+      if (this.editedIndex != -1) {
+        this.isNew = false;
+      }
       const itemToEdit = this.apps[this.editedIndex];
       this.editedItem.itemName = itemToEdit.name;
       this.editedItem.attachedServer = this.$store.getters.getServers.find(
@@ -96,6 +104,7 @@ export default {
     },
     close() {
       this.dialog = false;
+      this.isNew = true;
       this.editedIndex = -1;
       this.$nextTick(() => {
         this.editedItem = Object.assign({}, this.defaultItem);
@@ -115,7 +124,7 @@ export default {
         };
         this.$store.dispatch('updateApplication', {
           newItem: appToUpdate,
-          index: appToUpdate.id,
+          index: this.editedIndex,
         });
       } else {
         const newApp = {

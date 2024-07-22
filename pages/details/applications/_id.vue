@@ -5,6 +5,7 @@
       @save-new-item="save"
       item-type="Application"
       :dialog="dialog"
+      :isNew="false"
     >
       <add-new-app-form
         ref="formComponent"
@@ -16,7 +17,9 @@
       @delete-confirm="deleteConfirm"
       :dialogDelete="dialogDelete"
       :itemName="appDetails.name"
-    ></the-delete-dialog>
+    >
+      {{ warningMessage }}
+    </the-delete-dialog>
     <v-card
       outlined
       elevation="10"
@@ -100,6 +103,8 @@ export default {
   components: { TheDeleteDialog, TheFormDialog, addNewAppForm },
   data() {
     return {
+      warningMessage:
+        'WARNING! This action will detach all tasks attached to this application!',
       tab: 0,
       cameFromApplications: false,
       dialogDelete: false,
@@ -127,7 +132,9 @@ export default {
         name: application.name,
         date: application.date,
         edition_date: application.edition_date,
-        server: application.server,
+        server: this.$store.getters.getServers.find(
+          (server) => server.id == application.serverId
+        ).name,
         serverId: application.serverId,
         tasks: this.getTasksList(application.id),
       };
@@ -140,9 +147,16 @@ export default {
   },
   methods: {
     getTasksList(appId) {
-      return this.$store.getters.getTasks.filter(
-        (task) => task.applicationId == appId
-      );
+      return this.$store.getters.getTasks
+        .filter((task) => task.applicationId == appId)
+        .map((task) => {
+          return {
+            ...task,
+            server: this.$store.getters.getServers.find(
+              (server) => server.id == task.serverId
+            ).name,
+          };
+        });
     },
     showTaskDetails(taskId) {
       this.$router.push('/details/tasks/' + taskId);
@@ -205,7 +219,7 @@ export default {
         };
         this.$store.dispatch('updateApplication', {
           newItem: appToUpdate,
-          index: appToUpdate.id,
+          index: this.$store.getters.getApps.indexOf(this.appDetails),
         });
         this.close();
       }

@@ -5,6 +5,7 @@
       @save-new-item="checkAndSave"
       :item-type="itemType"
       :dialog="dialog"
+      :isNew="isNew"
     >
       <add-new-task-form
         v-if="itemType == 'Task'"
@@ -16,10 +17,11 @@
         ref="formComponent"
         :editedItem="editedItem"
       ></add-new-app-form>
-      <!-- <add-new-server-form
+      <add-new-server-form
         v-else
         ref="formComponent"
-        :edited -->
+        :editedItem="editedItem"
+      ></add-new-server-form>
     </the-form-dialog>
     <the-delete-dialog
       @cancel-delete="closeDelete"
@@ -59,6 +61,7 @@ import AddNewTaskForm from '@components/addNewTaskForm.vue';
 import TheOverview from '@UI/components/TheOverview.vue';
 import TheDataDisplayTable from '@UI/components/TheDataDisplayTable.vue';
 import AddNewAppForm from '@components/addNewAppForm.vue';
+import AddNewServerForm from '@components/addNewServerForm.vue';
 
 export default {
   components: {
@@ -68,6 +71,7 @@ export default {
     TheOverview,
     TheDataDisplayTable,
     AddNewAppForm,
+    AddNewServerForm,
   },
   props: [
     'items',
@@ -79,6 +83,7 @@ export default {
     'lastColumn',
     'secondLastColumn',
     'warning',
+    'isNew',
   ],
   emits: ['edit-item', 'save-data', 'close-dialog'],
   data() {

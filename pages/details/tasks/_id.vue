@@ -5,6 +5,7 @@
       @save-new-item="save"
       item-type="Task"
       :dialog="dialog"
+      :isNew="false"
     >
       <add-new-task-form
         ref="formComponent"
@@ -109,6 +110,9 @@ export default {
       const task = this.$store.getters.getTasks.find(
         (task) => task.id == this.$route.params.id
       );
+      task.server = this.$store.getters.getServers.find(
+        (server) => server.id == task.serverId
+      ).name;
       return task;
     },
     servers() {

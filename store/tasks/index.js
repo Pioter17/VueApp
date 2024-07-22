@@ -21,6 +21,11 @@ export default {
     removeTask(state, payload) {
       state.tasks = state.tasks.filter((task) => task.id != payload.taskId);
     },
+    removeAllServerTasks(state, payload) {
+      state.tasks = state.tasks.filter(
+        (task) => task.serverId != payload.serverId
+      );
+    },
     detachTasksFromApplication(state, payload) {
       state.tasks.forEach((task) => {
         if (task.applicationId == payload.appId) {

@@ -10,6 +10,7 @@
     @close-dialog="close"
     :lastColumn="lastColumn"
     :secondLastColumn="secondLastColumn"
+    :isNew="isNew"
   >
   </the-overview>
 </template>
@@ -23,6 +24,7 @@ export default {
   components: { TheOverview, AddNewTaskForm },
   data() {
     return {
+      isNew: true,
       headers: [
         { text: 'Name', value: 'name' },
         { text: 'Creation date', value: 'date' },
@@ -53,7 +55,14 @@ export default {
   },
   computed: {
     items() {
-      return this.$store.getters.getTasks;
+      return this.$store.getters.getTasks.map((task) => {
+        return {
+          ...task,
+          server: this.$store.getters.getServers.find(
+            (server) => server.id == task.serverId
+          ).name,
+        };
+      });
     },
   },
   methods: {
@@ -67,6 +76,9 @@ export default {
     },
     editItem(item) {
       this.editedIndex = this.items.indexOf(item);
+      if (this.editedIndex != -1) {
+        this.isNew = false;
+      }
       const itemToBeEdited = this.items[this.editedIndex];
       this.editedItem.itemName = itemToBeEdited.name;
       this.editedItem.attachedServer = this.$store.getters.getServers.find(
@@ -77,6 +89,7 @@ export default {
       );
     },
     close() {
+      this.isNew = true;
       this.$nextTick(() => {
         this.editedItem = Object.assign({}, this.defaultItem);
         this.editedIndex = -1;
