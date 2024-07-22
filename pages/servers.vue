@@ -49,6 +49,7 @@ export default {
       backLink: '/details/servers/',
       itemType: 'Server',
       headers: this.headers,
+      filterFunction: this.filterServers,
     };
   },
   computed: {
@@ -87,6 +88,14 @@ export default {
     },
     secondLastColumn(item) {
       return this.applications[item.count];
+    },
+    filterServers(data, serverName, applicationName, taskName) {
+      return data.filter((item) => {
+        const searchServerNameMatch = item.name
+          .toLowerCase()
+          .includes(serverName.toLowerCase());
+        return searchServerNameMatch;
+      });
     },
     editItem(item) {
       this.editedIndex = this.servers.indexOf(item);

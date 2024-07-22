@@ -1,9 +1,38 @@
 <template>
-  <v-data-table :headers="headers" height="60vh" :items="data">
+  <v-data-table :headers="headers" height="60vh" :items="filteredData">
     <template v-slot:top>
-      <v-toolbar flat>
+      <v-toolbar flat class="mb-10">
+        <v-col cols="10" sm="3" class="pa-4 pl-0">
+          <v-text-field
+            v-model="searchServer"
+            append-icon="mdi-magnify"
+            label="Search Server"
+            hide-details
+            style="width: 200px"
+          ></v-text-field>
+        </v-col>
+        <v-col cols="10" sm="3" class="pa-4">
+          <v-text-field
+            v-if="itemType != 'Server'"
+            v-model="searchApplication"
+            append-icon="mdi-magnify"
+            label="Search Application"
+            hide-details
+            style="width: 200px"
+          ></v-text-field>
+        </v-col>
+        <v-col cols="10" sm="3" class="pa-4">
+          <v-text-field
+            v-if="itemType == 'Task'"
+            v-model="searchTask"
+            append-icon="mdi-magnify"
+            label="Search Task"
+            hide-details
+            style="width: 200px"
+          ></v-text-field>
+        </v-col>
         <v-spacer></v-spacer>
-        <v-btn color="primary" dark class="mb-10" @click="openDialog">
+        <v-btn color="primary" dark @click="openDialog">
           Add new {{ itemType }}
         </v-btn>
       </v-toolbar>
@@ -30,9 +59,26 @@
 
 <script>
 export default {
-  inject: ['headers', 'itemType', 'backLink'],
+  inject: ['headers', 'itemType', 'backLink', 'filterFunction'],
   props: ['openDialog', 'data', 'lastColumn', 'secondLastColumn'],
   $emits: ['open-delete', 'open-form'],
+  data() {
+    return {
+      searchServer: '',
+      searchApplication: '',
+      searchTask: '',
+    };
+  },
+  computed: {
+    filteredData() {
+      return this.filterFunction(
+        this.data,
+        this.searchServer,
+        this.searchApplication,
+        this.searchTask
+      );
+    },
+  },
   methods: {
     handleRowClick(id) {
       this.$router.push(this.backLink + id);
@@ -47,10 +93,8 @@ export default {
 };
 </script>
 
-<style lang="scss" scoped>
-.v-data-table > .v-data-table__wrapper > table > tbody > tr > th,
-.v-data-table > .v-data-table__wrapper > table > thead > tr > th,
-.v-data-table > .v-data-table__wrapper > table > tfoot > tr > th {
-  font-size: 20px !important;
+<style scoped>
+.search {
+  width: 100px;
 }
 </style>

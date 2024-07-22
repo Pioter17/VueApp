@@ -48,7 +48,8 @@
           :data="items"
           :lastColumn="lastColumn"
           :secondLastColumn="secondLastColumn"
-        ></the-data-display-table>
+        >
+        </the-data-display-table>
       </v-sheet>
     </v-col>
   </v-row>
@@ -80,6 +81,7 @@ export default {
     'defaultItem',
     'itemToEdit',
     'save',
+    'filterFunction',
     'lastColumn',
     'secondLastColumn',
     'warning',

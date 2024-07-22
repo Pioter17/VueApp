@@ -51,6 +51,7 @@ export default {
       backLink: '/details/tasks/',
       itemType: 'Task',
       headers: this.headers,
+      filterFunction: this.filterTasks,
     };
   },
   computed: {
@@ -73,6 +74,24 @@ export default {
     },
     secondLastColumn(item) {
       return item.server;
+    },
+    filterTasks(data, serverName, applicationName, taskName) {
+      return data.filter((item) => {
+        const searchApplicationNameMatch = String(item.application)
+          .toLowerCase()
+          .includes(applicationName.toLowerCase());
+        const searchServerNameMatch = String(item.server)
+          .toLowerCase()
+          .includes(serverName.toLowerCase());
+        const searchTaskNameMatch = item.name
+          .toLowerCase()
+          .includes(taskName.toLowerCase());
+        return (
+          searchApplicationNameMatch &&
+          searchServerNameMatch &&
+          searchTaskNameMatch
+        );
+      });
     },
     editItem(item) {
       this.editedIndex = this.items.indexOf(item);

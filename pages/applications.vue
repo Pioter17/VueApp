@@ -52,6 +52,7 @@ export default {
       backLink: '/details/applications/',
       itemType: 'Application',
       headers: this.headers,
+      filterFunction: this.filterApplications,
     };
   },
   computed: {
@@ -86,6 +87,17 @@ export default {
     },
     secondLastColumn(item) {
       return item.server;
+    },
+    filterApplications(data, serverName, applicationName, taskName) {
+      return data.filter((item) => {
+        const searchApplicationNameMatch = item.name
+          .toLowerCase()
+          .includes(applicationName.toLowerCase());
+        const searchServerNameMatch = item.server
+          .toLowerCase()
+          .includes(serverName.toLowerCase());
+        return searchApplicationNameMatch && searchServerNameMatch;
+      });
     },
     editItem(item) {
       this.editedIndex = this.apps.indexOf(item);
