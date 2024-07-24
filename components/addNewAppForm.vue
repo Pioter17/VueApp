@@ -35,6 +35,11 @@ import { isUniqueName } from '@pages/utils/functions/check-unique-name';
 
 export default {
   props: ['editedItem'],
+  data() {
+    return {
+      oldName: this.editedItem.itemName,
+    };
+  },
   computed: {
     apps() {
       return this.$store.getters.getApps;
@@ -57,7 +62,7 @@ export default {
       return this.$refs.form.validate();
     },
     checkName(value) {
-      return isUniqueName(value, this.apps);
+      return isUniqueName(value, this.apps, this.oldName);
     },
   },
 };

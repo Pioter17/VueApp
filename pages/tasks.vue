@@ -102,7 +102,7 @@ export default {
       if (this.editedIndex != -1) {
         const taskToUpdate = {
           id: this.items[this.editedIndex].id,
-          name: this.editedItem.itemName,
+          name: this.editedItem.itemName.trim(),
           date: this.items[this.editedIndex].date,
           edition_date: new Date().toISOString().split('T')[0],
           server: this.editedItem.attachedServer.name,
@@ -121,7 +121,7 @@ export default {
       } else {
         const newTask = {
           id: generateID(30),
-          name: this.editedItem.itemName,
+          name: this.editedItem.itemName.trim(),
           date: new Date().toISOString().split('T')[0],
           edition_date: new Date().toISOString().split('T')[0],
           server: this.editedItem.attachedServer.name,

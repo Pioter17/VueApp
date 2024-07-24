@@ -111,7 +111,7 @@ export default {
       if (this.editedIndex != -1) {
         const serverToUpdate = {
           id: this.servers[this.editedIndex].id,
-          name: this.editedItem.itemName,
+          name: this.editedItem.itemName.trim(),
           date: this.servers[this.editedIndex].date,
           edition_date: new Date().toISOString().split('T')[0],
         };
@@ -122,7 +122,7 @@ export default {
       } else {
         const newServer = {
           id: generateID(30),
-          name: this.editedItem.itemName,
+          name: this.editedItem.itemName.trim(),
           date: new Date().toISOString().split('T')[0],
           edition_date: new Date().toISOString().split('T')[0],
         };

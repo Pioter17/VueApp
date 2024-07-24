@@ -7,7 +7,7 @@
         </span>
       </v-card-title>
       <v-card-text>
-        <v-container>
+        <v-container v-if="dialog">
           <slot></slot>
         </v-container>
       </v-card-text>
