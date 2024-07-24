@@ -3,7 +3,12 @@
     <v-text-field
       v-model="editedItem.itemName"
       :label="$t('forms.appName')"
-      :rules="[(v) => !!v || $t('forms.appName') + $t('forms.required')]"
+      :rules="[
+        (v) => !!v || $t('forms.appName') + ' ' + $t('forms.required'),
+        (v) => (v && v.trim() !== '') || $t('forms.noWhitespace'),
+        (v) => checkName(v) || $t('forms.nameMustBeUnique'),
+        (v) => v.length <= 15 || $t('forms.tooLong'),
+      ]"
     ></v-text-field>
     <v-select
       v-model="editedItem.attachedServer"
@@ -26,9 +31,14 @@
 </template>
 
 <script>
+import { isUniqueName } from '@pages/utils/functions/check-unique-name';
+
 export default {
   props: ['editedItem'],
   computed: {
+    apps() {
+      return this.$store.getters.getApps;
+    },
     servers() {
       return this.$store.getters.getServers;
     },
@@ -45,6 +55,9 @@ export default {
   methods: {
     validateForm() {
       return this.$refs.form.validate();
+    },
+    checkName(value) {
+      return isUniqueName(value, this.apps);
     },
   },
 };

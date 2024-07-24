@@ -42,6 +42,9 @@ const pol = {
     serverInfo: `Możesz ustawić tutaj tylko nazwę serwera. Aby przypisać aplikacje i/lub zadania, przejdź do stron aplikacji i/lub zadań.
                  To rozwiązanie ma na celu zapobieganie niezamierzonym działaniom, takim jak odłączenie wszystkich zadań od innego serwera
                  z powodu ponownego przypisania aplikacji, do której są one przypisane.`,
+    nameMustBeUnique: 'Nazwa nie może się powtarzać z już istniejącą',
+    noWhitespace: 'Nazwa nie może zawierać tylko białych znaków',
+    tooLong: 'Nazwa nie może mieć więcej niż 15 znaków',
   },
   headers: {
     name: 'Nazwa',

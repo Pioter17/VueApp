@@ -44,6 +44,9 @@ const eng = {
                 to it, go to applications and/or tasks pages. This solution is to prevent
                 some unintentional actions, like detaching all tasks from another server,
                 because of reattaching the application they are connected to.`,
+    nameMustBeUnique: 'Name must be unique',
+    noWhitespace: 'Name must contain not only whitespace',
+    tooLong: 'Name length cannot exceed 15 characters',
   },
   headers: {
     name: 'Name',

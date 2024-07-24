@@ -134,8 +134,8 @@ export default {
       const isValid = this.$refs.formComponent.validateForm();
       if (isValid) {
         this.save();
+        this.close();
       }
-      this.close();
     },
   },
 };
