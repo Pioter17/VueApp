@@ -57,7 +57,13 @@ export default {
       }
     },
   },
+  watch: {
+    'editedItem.attachedServer': 'clearAttachedTasks',
+  },
   methods: {
+    clearAttachedTasks() {
+      this.editedItem.attachedTasks = [];
+    },
     validateForm() {
       return this.$refs.form.validate();
     },
