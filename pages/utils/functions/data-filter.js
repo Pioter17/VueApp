@@ -1,11 +1,17 @@
-export function filterData(data, serverName, applicationName, taskName) {
+export function filterData(
+  data,
+  serverName,
+  applicationName,
+  taskName,
+  itemType
+) {
   return data.filter((item) => {
-    if (applicationName == '' && taskName == '') {
+    if (itemType == 'server') {
       const searchServerNameMatch = String(item.name)
         .toLowerCase()
         .includes(serverName.toLowerCase());
       return searchServerNameMatch;
-    } else if (taskName == '') {
+    } else if (itemType == 'application') {
       const searchApplicationNameMatch = String(item.name)
         .toLowerCase()
         .includes(applicationName.toLowerCase());

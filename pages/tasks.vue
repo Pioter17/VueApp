@@ -1,7 +1,7 @@
 <template>
   <the-overview
     :items="items"
-    itemType="Task"
+    itemType="task"
     deleteActionName="deleteTask"
     :defaultItem="defaultItem"
     :itemToEdit="editedItem"
@@ -11,21 +11,22 @@
     :lastColumn="lastColumn"
     :secondLastColumn="secondLastColumn"
     :isNew="isNew"
+    :headers="headers"
   >
   </the-overview>
 </template>
 
 <script>
 import { generateID } from '@pages/utils/functions/id-generator';
-import { tasksHeaders } from '@core/constants/headers';
 import TheOverview from '@UI/components/TheOverview.vue';
+import { getTasksHeaders } from '@core/constants/headers';
 
 export default {
   components: { TheOverview },
   data() {
     return {
       isNew: true,
-      headers: tasksHeaders,
+      headers: getTasksHeaders(this.$i18n),
       editedIndex: -1,
       editedItem: {
         itemName: '',
@@ -42,7 +43,7 @@ export default {
   provide() {
     return {
       backLink: '/details/tasks/',
-      itemType: 'Task',
+      itemType: 'task',
       headers: this.headers,
     };
   },
@@ -58,11 +59,20 @@ export default {
       });
     },
   },
+  watch: {
+    '$i18n.locale': 'localeChanged',
+  },
   methods: {
+    setTVar() {
+      this.$i18n.locale = this.$store.getters.getLocale;
+    },
+    localeChanged() {
+      this.headers = getTasksHeaders(this.$i18n);
+    },
     lastColumn(item) {
       return item.application
         ? item.application
-        : 'Nie przypisano do aplikacji';
+        : this.$t('tasksPage.taskNotAssigned');
     },
     secondLastColumn(item) {
       return item.server;
@@ -126,6 +136,11 @@ export default {
         this.$store.dispatch('saveTask', newTask);
       }
     },
+  },
+  beforeRouteEnter(_, from, next) {
+    next((vm) => {
+      vm.setTVar();
+    });
   },
 };
 </script>

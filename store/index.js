@@ -14,4 +14,24 @@ export default () =>
       applications,
       tasks,
     },
+    state() {
+      return {
+        locale: 'en',
+      };
+    },
+    getters: {
+      getLocale(state) {
+        return state.locale;
+      },
+    },
+    mutations: {
+      setLocale(state, payload) {
+        state.locale = payload.newLocale;
+      },
+    },
+    actions: {
+      changeLang(context, newLang) {
+        context.commit('setLocale', { newLocale: newLang });
+      },
+    },
   });

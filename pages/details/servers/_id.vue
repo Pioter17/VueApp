@@ -3,7 +3,7 @@
     <the-form-dialog
       @cancel-close="close"
       @save-new-item="save"
-      item-type="Server"
+      item-type="server"
       :dialog="dialog"
       :isNew="false"
     >
@@ -18,7 +18,7 @@
       :dialogDelete="dialogDelete"
       :itemName="serverDetails.name"
     >
-      {{ warningMessage }}
+      {{ $t(warningMessage) }}
     </the-delete-dialog>
     <v-card
       outlined
@@ -30,19 +30,19 @@
       <v-row class="d-flex justify-space-between mb-12">
         <div class="d-flex flex-column">
           <v-card-actions class="d-flex align-center" style="gap: 20px">
-            <v-btn @click="goBack">Go back</v-btn>
+            <v-btn @click="goBack">{{ $t('goBack') }}</v-btn>
             <v-btn v-if="!cameFromServers" @click="goToServers">
-              Go to servers
+              {{ $t('goToServers') }}
             </v-btn>
           </v-card-actions>
           <v-card-title primary-title class="text-h2 mb-4">
             {{ serverDetails.name }}
           </v-card-title>
           <v-card-subtitle class="text-h5 mt-2">
-            Creation date: {{ serverDetails.date }}
+            {{ $t('creationDate') }}: {{ serverDetails.date }}
           </v-card-subtitle>
           <v-card-subtitle class="text-h5">
-            Edition date: {{ serverDetails.edition_date }}
+            {{ $t('editionDate') }}: {{ serverDetails.edition_date }}
           </v-card-subtitle>
         </div>
         <div height="200" class="d-flex align-center">
@@ -50,18 +50,18 @@
             class="action__buttons d-flex flex-column align-center justify-center"
           >
             <v-btn color="info" block large @click="updateServer">
-              UPDATE SERVER
+              {{ $t('updateServer') }}
             </v-btn>
             <v-btn color="error" class="ml-0" block large @click="deleteServer">
-              DELETE SERVER
+              {{ $t('deleteServer') }}
             </v-btn>
           </v-card-actions>
         </div>
       </v-row>
       <v-row>
         <v-tabs v-model="tab" grow>
-          <v-tab> Applications </v-tab>
-          <v-tab> Tasks </v-tab>
+          <v-tab> {{ $t('applications') }} </v-tab>
+          <v-tab> {{ $t('tasks') }} </v-tab>
         </v-tabs>
         <v-tabs-items class="full__width" v-model="tab">
           <v-tab-item>
@@ -113,23 +113,21 @@ import TheDeleteDialog from '@UI/components/TheDeleteDialog.vue';
 import TheFormDialog from '@UI/components/TheFormDialog.vue';
 import addNewServerForm from '@components/addNewServerForm.vue';
 import {
-  serverDetailsTasksHeaders,
-  serverDetailsApplicationsHeaders,
-} from '@core/constants/headers';
+  getServerDetailsApplicationsHeaders,
+  getServerDetailsTasksHeaders,
+} from '@/core/constants/headers';
 
 export default {
   components: { TheDeleteDialog, TheFormDialog, addNewServerForm },
   data() {
     return {
       tab: 0,
-      warningMessage: `WARNING! This action will DELETE all applications and tasks attached to this server!\n
-        Consider reattaching them first.
-        Are you sure to delete this server?`,
+      warningMessage: 'serversPage.warning',
       cameFromServers: false,
       dialogDelete: false,
       dialog: false,
-      taskHeaders: serverDetailsTasksHeaders,
-      appHeaders: serverDetailsApplicationsHeaders,
+      taskHeaders: getServerDetailsTasksHeaders(this.$i18n),
+      appHeaders: getServerDetailsApplicationsHeaders(this.$i18n),
       editedItem: {
         itemName: '',
       },
@@ -154,8 +152,17 @@ export default {
     serverDetails(newValue) {
       this.updateEditedItem(newValue);
     },
+    '$i18n.locale': 'localeChanged',
+    '$store.getters.getLocale': 'setTVar',
   },
   methods: {
+    setTVar() {
+      this.$i18n.locale = this.$store.getters.getLocale;
+    },
+    localeChanged() {
+      this.taskHeaders = getServerDetailsTasksHeaders(this.$i18n);
+      this.appHeaders = getServerDetailsApplicationsHeaders(this.$i18n);
+    },
     getApplicationsList(serverId) {
       const apps = this.$store.getters.getApps.filter(
         (app) => app.serverId == serverId
@@ -235,6 +242,7 @@ export default {
   },
   beforeRouteEnter(_, from, next) {
     next((vm) => {
+      vm.setTVar();
       if (from.fullPath == '/servers') {
         vm.setCameFromServers(true);
       } else {

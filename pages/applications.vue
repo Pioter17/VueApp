@@ -1,7 +1,7 @@
 <template>
   <the-overview
     :items="apps"
-    itemType="Application"
+    itemType="application"
     deleteActionName="deleteApplication"
     :defaultItem="defaultItem"
     :itemToEdit="editedItem"
@@ -12,22 +12,22 @@
     :secondLastColumn="secondLastColumn"
     :warning="warningMessage"
     :isNew="isNew"
+    :headers="headers"
   ></the-overview>
 </template>
 
 <script>
 import { generateID } from '@pages/utils/functions/id-generator';
-import { applicationsHeaders } from '@core/constants/headers';
 import TheOverview from '@UI/components/TheOverview.vue';
+import { getApplicationsHeaders } from '@/core/constants/headers';
 
 export default {
   components: { TheOverview },
   data() {
     return {
       isNew: true,
-      warningMessage:
-        'WARNING! This action will detach all tasks attached to this application!',
-      headers: applicationsHeaders,
+      warningMessage: 'applicationsPage.warning',
+      headers: getApplicationsHeaders(this.$i18n),
       editedIndex: -1,
       editedItem: {
         itemName: '',
@@ -44,7 +44,7 @@ export default {
   provide() {
     return {
       backLink: '/details/applications/',
-      itemType: 'Application',
+      itemType: 'application',
       headers: this.headers,
     };
   },
@@ -74,7 +74,17 @@ export default {
       });
     },
   },
+  watch: {
+    '$i18n.locale': 'localeChanged',
+    '$store.getters.getLocale': 'setTVar',
+  },
   methods: {
+    setTVar() {
+      this.$i18n.locale = this.$store.getters.getLocale;
+    },
+    localeChanged() {
+      this.headers = getApplicationsHeaders(this.$i18n);
+    },
     lastColumn(item) {
       return this.tasks[item.count];
     },
@@ -134,6 +144,11 @@ export default {
       }
       this.close();
     },
+  },
+  beforeRouteEnter(_, from, next) {
+    next((vm) => {
+      vm.setTVar();
+    });
   },
 };
 </script>

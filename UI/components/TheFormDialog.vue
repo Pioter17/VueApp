@@ -2,7 +2,9 @@
   <v-dialog v-model="dialog" max-width="600px" persistent>
     <v-card>
       <v-card-title>
-        <span class="text-h5 mt-2"> {{ isNewAction }} {{ itemType }} </span>
+        <span class="text-h5 mt-2">
+          {{ $t(isNewAction) }} {{ $t('itemType.' + itemType) }}
+        </span>
       </v-card-title>
       <v-card-text>
         <v-container>
@@ -12,10 +14,10 @@
       <v-card-actions>
         <v-spacer></v-spacer>
         <v-btn color="blue darken-1" class="mb-2" text @click="close">
-          Cancel
+          {{ $t('cancel') }}
         </v-btn>
         <v-btn color="blue darken-1" class="mb-2" text @click="save">
-          Save
+          {{ $t('save') }}
         </v-btn>
       </v-card-actions>
     </v-card>
@@ -28,7 +30,7 @@ export default {
   emits: ['cancel-close', 'save-new-item'],
   computed: {
     isNewAction() {
-      return this.isNew ? 'Add New ' : 'Edit ';
+      return this.isNew ? 'addNew' : 'edit';
     },
   },
   methods: {

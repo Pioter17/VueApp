@@ -2,24 +2,24 @@
   <v-form ref="form">
     <v-text-field
       v-model="editedItem.itemName"
-      label="Task name"
-      :rules="[(v) => !!v || 'Task name is required']"
+      :label="$t('forms.taskName')"
+      :rules="[(v) => !!v || $t('forms.taskName') + $t('forms.required')]"
     ></v-text-field>
     <v-select
       v-model="editedItem.attachedServer"
       :items="servers"
       item-text="name"
-      label="Attach to server"
+      :label="$t('forms.attachToServer')"
       return-object
-      :rules="[(v) => !!v || 'Server selection is required']"
+      :rules="[(v) => !!v || $t('forms.serverRequired')]"
     ></v-select>
     <v-select
       v-model="editedItem.attachedApplication"
       :items="applications"
       item-text="name"
-      label="Attach to application"
+      :label="$t('forms.attachToApplication')"
       return-object
-      no-data-text="This server doesn't have any applications attached"
+      :no-data-text="$t('forms.emptyServer')"
     ></v-select>
   </v-form>
 </template>

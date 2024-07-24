@@ -3,7 +3,7 @@
     <the-form-dialog
       @cancel-close="close"
       @save-new-item="save"
-      item-type="Application"
+      item-type="application"
       :dialog="dialog"
       :isNew="false"
     >
@@ -18,7 +18,7 @@
       :dialogDelete="dialogDelete"
       :itemName="appDetails.name"
     >
-      {{ warningMessage }}
+      {{ $t(warningMessage) }}
     </the-delete-dialog>
     <v-card
       outlined
@@ -30,26 +30,26 @@
       <v-row class="d-flex justify-space-between mb-12">
         <div class="d-flex flex-column">
           <v-card-actions class="d-flex align-center" style="gap: 20px">
-            <v-btn @click="goBack">Go back</v-btn>
-            <v-btn v-if="!cameFromApplications" @click="goToApplications"
-              >Go to applications</v-btn
-            >
+            <v-btn @click="goBack">{{ $t('goBack') }}</v-btn>
+            <v-btn v-if="!cameFromApplications" @click="goToApplications">{{
+              $t('goToApplications')
+            }}</v-btn>
           </v-card-actions>
           <v-card-title primary-title class="text-h2 mb-4">
             {{ appDetails.name }}
           </v-card-title>
           <v-card-subtitle class="text-h5 mt-2">
-            Creation date: {{ appDetails.date }}
+            {{ $t('creationDate') }}: {{ appDetails.date }}
           </v-card-subtitle>
           <v-card-subtitle class="text-h5">
-            Edition date: {{ appDetails.edition_date }}
+            {{ $t('editionDate') }}: {{ appDetails.edition_date }}
           </v-card-subtitle>
           <v-card-text>
             <nuxt-link
               class="text-h6"
               :to="'/details/servers/' + appDetails.serverId"
             >
-              Server: {{ appDetails.server }}
+              {{ $t('server') }}: {{ appDetails.server }}
             </nuxt-link>
           </v-card-text>
         </div>
@@ -59,7 +59,7 @@
             style="gap: 20px"
           >
             <v-btn color="info" block large @click="updateApplication">
-              UPDATE APPLICATION
+              {{ $t('updateApplication') }}
             </v-btn>
             <v-btn
               color="error"
@@ -68,7 +68,7 @@
               large
               @click="deleteApplication"
             >
-              DELETE APPLICATION
+              {{ $t('deleteApplication') }}
             </v-btn>
           </v-card-actions>
         </div>
@@ -98,19 +98,18 @@
 import TheDeleteDialog from '@UI/components/TheDeleteDialog.vue';
 import TheFormDialog from '@UI/components/TheFormDialog.vue';
 import addNewAppForm from '@components/addNewAppForm.vue';
-import { applicationDetailsHeaders } from '@core/constants/headers';
+import { getApplicationDetailsHeaders } from '@/core/constants/headers';
 
 export default {
   components: { TheDeleteDialog, TheFormDialog, addNewAppForm },
   data() {
     return {
-      warningMessage:
-        'WARNING! This action will detach all tasks attached to this application!',
+      warningMessage: 'applicationsPage.warning',
       tab: 0,
       cameFromApplications: false,
       dialogDelete: false,
       dialog: false,
-      headers: applicationDetailsHeaders,
+      headers: getApplicationDetailsHeaders(this.$i18n),
       editedItem: {
         itemName: '',
         attachedServer: null,
@@ -140,8 +139,15 @@ export default {
     appDetails(newValue) {
       this.updateEditedItem(newValue);
     },
+    '$i18n.locale': 'localeChanged',
   },
   methods: {
+    setTVar() {
+      this.$i18n.locale = this.$store.getters.getLocale;
+    },
+    localeChanged() {
+      this.headers = getApplicationDetailsHeaders(this.$i18n);
+    },
     getTasksList(appId) {
       return this.$store.getters.getTasks
         .filter((task) => task.applicationId == appId)
@@ -223,6 +229,7 @@ export default {
   },
   beforeRouteEnter(_, from, next) {
     next((vm) => {
+      vm.setTVar();
       if (from.fullPath == '/applications') {
         vm.setCameFromApplications(true);
       } else {

@@ -3,7 +3,7 @@
     <the-form-dialog
       @cancel-close="close"
       @save-new-item="save"
-      item-type="Task"
+      item-type="task"
       :dialog="dialog"
       :isNew="false"
     >
@@ -28,37 +28,39 @@
       <v-row>
         <v-col cols="8">
           <v-card-actions class="d-flex align-center" style="gap: 20px">
-            <v-btn @click="goBack">Go back</v-btn>
-            <v-btn v-if="!cameFromTasks" @click="goToTasks">Go to tasks</v-btn>
+            <v-btn @click="goBack">{{ $t('goBack') }}</v-btn>
+            <v-btn v-if="!cameFromTasks" @click="goToTasks">{{
+              $t('goToTasks')
+            }}</v-btn>
           </v-card-actions>
           <v-card-title primary-title class="text-h2 mb-4">
             {{ taskDetails.name }}
           </v-card-title>
           <v-card-subtitle class="text-h5 mt-6">
-            Creation date: {{ taskDetails.date }}
+            {{ $t('creationDate') }}: {{ taskDetails.date }}
           </v-card-subtitle>
           <v-card-subtitle class="text-h5">
-            Edition date: {{ taskDetails.edition_date }}
+            {{ $t('editionDate') }}: {{ taskDetails.edition_date }}
           </v-card-subtitle>
           <v-card-text class="d-flex flex-column">
             <nuxt-link
               class="text-h6"
               :to="'/details/servers/' + taskDetails.serverId"
             >
-              Server: {{ taskDetails.server }}
+              {{ $t('server') }}: {{ taskDetails.server }}
             </nuxt-link>
             <nuxt-link
               class="text-h6"
               v-if="taskDetails.applicationId"
               :to="'/details/applications/' + taskDetails.applicationId"
             >
-              Application: {{ taskDetails.application }}
+              {{ $t('application') }}: {{ taskDetails.application }}
             </nuxt-link>
             <div v-else>
               <p class="text-h6">
-                This task is not attached to any application
+                {{ $t('tasksPage.taskNotAssigned') }}
               </p>
-              <v-btn color="success">Attach to application</v-btn>
+              <!-- <v-btn color="success">Attach to application</v-btn> -->
             </div>
           </v-card-text>
         </v-col>
@@ -68,10 +70,10 @@
             style="gap: 20px"
           >
             <v-btn color="info" @click="updateTask" block large>
-              UPDATE TASK
+              {{ $t('updateTask') }}
             </v-btn>
             <v-btn color="error" class="ml-0" @click="deleteTask" block large>
-              DELETE TASK
+              {{ $t('deleteTask') }}
             </v-btn>
           </v-card-actions>
         </v-col>
@@ -125,6 +127,9 @@ export default {
     },
   },
   methods: {
+    setTVar() {
+      this.$i18n.locale = this.$store.getters.getLocale;
+    },
     goBack() {
       this.$router.back();
     },
@@ -196,6 +201,7 @@ export default {
   },
   beforeRouteEnter(_, from, next) {
     next((vm) => {
+      vm.setTVar();
       if (from.fullPath == '/tasks') {
         vm.setCameFromTasks(true);
       } else {

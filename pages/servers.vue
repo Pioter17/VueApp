@@ -1,7 +1,7 @@
 <template>
   <the-overview
     :items="servers"
-    itemType="Server"
+    itemType="server"
     deleteActionName="deleteServer"
     :defaultItem="defaultItem"
     :itemToEdit="editedItem"
@@ -12,23 +12,22 @@
     :secondLastColumn="secondLastColumn"
     :warning="warningMessage"
     :isNew="isNew"
+    :headers="headers"
   ></the-overview>
 </template>
 
 <script>
 import { generateID } from '@pages/utils/functions/id-generator';
-import { serversHeaders } from '@core/constants/headers';
 import TheOverview from '@UI/components/TheOverview.vue';
+import { getServersHeaders } from '@/core/constants/headers';
 
 export default {
   components: { TheOverview },
   data() {
     return {
       isNew: true,
-      warningMessage: `WARNING! This action will DELETE all applications and tasks attached to this server!\n
-        Consider reattaching them first.
-        Are you sure to delete this server?`,
-      headers: serversHeaders,
+      warningMessage: 'serversPage.warning',
+      headers: getServersHeaders(this.$i18n),
       editedIndex: -1,
       editedItem: {
         itemName: '',
@@ -41,8 +40,7 @@ export default {
   provide() {
     return {
       backLink: '/details/servers/',
-      itemType: 'Server',
-      headers: this.headers,
+      itemType: 'server',
     };
   },
   computed: {
@@ -75,7 +73,16 @@ export default {
       });
     },
   },
+  watch: {
+    '$i18n.locale': 'localeChanged',
+  },
   methods: {
+    setTVar() {
+      this.$i18n.locale = this.$store.getters.getLocale;
+    },
+    localeChanged() {
+      this.headers = getServersHeaders(this.$i18n);
+    },
     lastColumn(item) {
       return this.tasks[item.count];
     },
@@ -123,6 +130,11 @@ export default {
       }
       this.close();
     },
+  },
+  beforeRouteEnter(_, from, next) {
+    next((vm) => {
+      vm.setTVar();
+    });
   },
 };
 </script>

@@ -8,23 +8,16 @@
 
         <router-link v-for="link in links" :key="link.title" :to="link.link">
           <v-btn variant="text" class="m-10">
-            {{ link.title }}
+            {{ $t(link.title) }}
           </v-btn>
         </router-link>
 
         <v-spacer></v-spacer>
 
-        <!-- <v-responsive max-width="160">
-          <v-text-field
-            density="compact"
-            label="Search"
-            :rounded="true"
-            variant="solo-filled"
-            flat
-            hide-details
-            single-line
-          ></v-text-field>
-        </v-responsive> -->
+        <v-container class="">
+          <v-btn small elevation="" @click="changeLang('pl')"> PL </v-btn>
+          <v-btn small elevation="" @click="changeLang('en')"> EN </v-btn>
+        </v-container>
       </v-container>
     </v-app-bar>
 
@@ -39,50 +32,30 @@
 <script setup>
 const links = [
   {
-    title: 'Strona główna',
+    title: 'mainPage',
     link: '/',
   },
   {
-    title: 'Serwery',
+    title: 'servers',
     link: '/servers',
   },
   {
-    title: 'Aplikacje',
+    title: 'applications',
     link: '/applications',
   },
   {
-    title: 'Taski',
+    title: 'tasks',
     link: '/tasks',
   },
 ];
 </script>
-
 <script>
 export default {
-  name: 'DefaultLayout',
-  data() {
-    return {
-      links: ['Dashboard', 'Messages', 'Profile', 'Updates'],
-      clipped: false,
-      drawer: false,
-      fixed: false,
-      items: [
-        {
-          icon: 'mdi-apps',
-          title: 'Welcome',
-          to: '/',
-        },
-        {
-          icon: 'mdi-chart-bubble',
-          title: 'Inspire',
-          to: '/inspire',
-        },
-      ],
-      miniVariant: false,
-      right: true,
-      rightDrawer: false,
-      title: 'Vuetify.js',
-    };
+  methods: {
+    changeLang(lang) {
+      this.$i18n.locale = lang;
+      this.$store.dispatch('changeLang', lang);
+    },
   },
 };
 </script>

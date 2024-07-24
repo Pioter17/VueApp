@@ -6,34 +6,34 @@
           <v-text-field
             v-model="searchServer"
             append-icon="mdi-magnify"
-            label="Search Server"
+            :label="$t('search') + ' ' + $t('itemType.server')"
             hide-details
             style="width: 200px"
           ></v-text-field>
         </v-col>
         <v-col cols="10" sm="3" class="pa-4">
           <v-text-field
-            v-if="itemType != 'Server'"
+            v-if="itemType != 'server'"
             v-model="searchApplication"
             append-icon="mdi-magnify"
-            label="Search Application"
+            :label="$t('search') + ' ' + $t('itemType.application')"
             hide-details
             style="width: 200px"
           ></v-text-field>
         </v-col>
         <v-col cols="10" sm="3" class="pa-4">
           <v-text-field
-            v-if="itemType == 'Task'"
+            v-if="itemType == 'task'"
             v-model="searchTask"
             append-icon="mdi-magnify"
-            label="Search Task"
+            :label="$t('search') + ' ' + $t('itemType.task')"
             hide-details
             style="width: 200px"
           ></v-text-field>
         </v-col>
         <v-spacer></v-spacer>
         <v-btn color="primary" dark @click="openDialog">
-          Add new {{ itemType }}
+          {{ $t('addNew') }} {{ $t('itemType.' + itemType) }}
         </v-btn>
       </v-toolbar>
     </template>
@@ -61,8 +61,8 @@
 import { filterData } from '@pages/utils/functions/data-filter';
 
 export default {
-  inject: ['headers', 'itemType', 'backLink'],
-  props: ['openDialog', 'data', 'lastColumn', 'secondLastColumn'],
+  inject: ['itemType', 'backLink'],
+  props: ['openDialog', 'data', 'lastColumn', 'secondLastColumn', 'headers'],
   $emits: ['open-delete', 'open-form'],
   data() {
     return {
@@ -77,7 +77,8 @@ export default {
         this.data,
         this.searchServer,
         this.searchApplication,
-        this.searchTask
+        this.searchTask,
+        this.itemType
       );
     },
   },

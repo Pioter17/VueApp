@@ -8,12 +8,12 @@
       :isNew="isNew"
     >
       <add-new-task-form
-        v-if="itemType == 'Task'"
+        v-if="itemType == 'task'"
         ref="formComponent"
         :editedItem="editedItem"
       ></add-new-task-form>
       <add-new-app-form
-        v-else-if="itemType == 'Application'"
+        v-else-if="itemType == 'application'"
         ref="formComponent"
         :editedItem="editedItem"
       ></add-new-app-form>
@@ -29,7 +29,7 @@
       :dialogDelete="dialogDelete"
       :itemName="editedItem.itemName"
     >
-      {{ warning }}
+      {{ $t(warning) }}
     </the-delete-dialog>
     <v-col class="d-flex justify-center">
       <v-sheet
@@ -40,7 +40,7 @@
         rounded="lg"
         class="pa-14 mt-16"
       >
-        <div class="text-h4 mb-10">{{ itemType + 's' }}</div>
+        <div class="text-h4 mb-10">{{ $t(itemType + 's') }}</div>
         <the-data-display-table
           @open-delete="deleteItem"
           @open-form="openEditForm"
@@ -48,6 +48,7 @@
           :data="items"
           :lastColumn="lastColumn"
           :secondLastColumn="secondLastColumn"
+          :headers="headers"
         >
         </the-data-display-table>
       </v-sheet>
@@ -86,6 +87,7 @@ export default {
     'secondLastColumn',
     'warning',
     'isNew',
+    'headers',
   ],
   emits: ['edit-item', 'save-data', 'close-dialog'],
   data() {

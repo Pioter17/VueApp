@@ -1,5 +1,7 @@
 import colors from 'vuetify/es5/util/colors';
 import { resolve } from 'path';
+import eng from './i18n/en';
+import pol from './i18n/pl';
 
 export default {
   // Disable server-side rendering: https://go.nuxtjs.dev/ssr-mode
@@ -24,9 +26,6 @@ export default {
   // Global CSS: https://go.nuxtjs.dev/config-css
   css: [],
 
-  // Plugins to run before rendering page: https://go.nuxtjs.dev/config-plugins
-  plugins: [],
-
   // Auto import components: https://go.nuxtjs.dev/config-components
   components: true,
 
@@ -43,7 +42,19 @@ export default {
     // https://go.nuxtjs.dev/axios
     '@nuxtjs/axios',
     '@nuxtjs/vuetify',
+    'nuxt-i18n',
   ],
+
+  i18n: {
+    locales: ['en', 'pl'],
+    defaultLocale: 'en',
+    vueI18n: {
+      messages: {
+        en: eng,
+        pl: pol,
+      },
+    },
+  },
 
   // Axios module configuration: https://go.nuxtjs.dev/config-axios
   axios: {

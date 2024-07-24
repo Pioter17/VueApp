@@ -1,47 +1,47 @@
-export const serversHeaders = [
-  { text: 'Name', value: 'name' },
-  { text: 'Creation date', value: 'date' },
-  { text: 'Edition date', value: 'edition_date' },
-  { text: 'Applications' },
-  { text: 'Tasks' },
+export const getServersHeaders = (i18n) => [
+  { text: i18n.t('headers.name'), value: 'name' },
+  { text: i18n.t('headers.creationDate'), value: 'date' },
+  { text: i18n.t('headers.editionDate'), value: 'edition_date' },
+  { text: i18n.t('headers.apps') },
+  { text: i18n.t('headers.tasks') },
   { text: ' ', value: 'actions', sortable: false },
 ];
 
-export const applicationsHeaders = [
-  { text: 'Name', value: 'name' },
-  { text: 'Creation date', value: 'date' },
-  { text: 'Edition date', value: 'edition_date' },
-  { text: 'Server', value: 'server' },
-  { text: 'Tasks' },
+export const getApplicationsHeaders = (i18n) => [
+  { text: i18n.t('headers.name'), value: 'name' },
+  { text: i18n.t('headers.creationDate'), value: 'date' },
+  { text: i18n.t('headers.editionDate'), value: 'edition_date' },
+  { text: i18n.t('headers.server'), value: 'server' },
+  { text: i18n.t('headers.tasks') },
   { text: ' ' },
 ];
 
-export const tasksHeaders = [
-  { text: 'Name', value: 'name' },
-  { text: 'Creation date', value: 'date' },
-  { text: 'Edition date', value: 'edition_date' },
-  { text: 'Server', value: 'server' },
-  { text: 'Application', value: 'application' },
+export const getTasksHeaders = (i18n) => [
+  { text: i18n.t('headers.name'), value: 'name' },
+  { text: i18n.t('headers.creationDate'), value: 'date' },
+  { text: i18n.t('headers.editionDate'), value: 'edition_date' },
+  { text: i18n.t('headers.server'), value: 'server' },
+  { text: i18n.t('headers.application'), value: 'application' },
   { text: ' ' },
 ];
 
-export const applicationDetailsHeaders = [
-  { text: 'Name', value: 'name' },
-  { text: 'Creation date', value: 'date' },
-  { text: 'Edition date', value: 'edition_date' },
-  { text: 'Server', value: 'server' },
+export const getApplicationDetailsHeaders = (i18n) => [
+  { text: i18n.t('headers.name'), value: 'name' },
+  { text: i18n.t('headers.creationDate'), value: 'date' },
+  { text: i18n.t('headers.editionDate'), value: 'edition_date' },
+  { text: i18n.t('headers.server'), value: 'server' },
 ];
 
-export const serverDetailsTasksHeaders = [
-  { text: 'Name', value: 'name' },
-  { text: 'Creation Date', value: 'date' },
-  { text: 'Edition date', value: 'edition_date' },
-  { text: 'Application', value: 'application' },
+export const getServerDetailsTasksHeaders = (i18n) => [
+  { text: i18n.t('headers.name'), value: 'name' },
+  { text: i18n.t('headers.creationDate'), value: 'date' },
+  { text: i18n.t('headers.editionDate'), value: 'edition_date' },
+  { text: i18n.t('headers.application'), value: 'application' },
 ];
 
-export const serverDetailsApplicationsHeaders = [
-  { text: 'Name', value: 'name' },
-  { text: 'Creation date', value: 'date' },
-  { text: 'Edition date', value: 'edition_date' },
-  { text: 'Tasks', value: 'tasks' },
+export const getServerDetailsApplicationsHeaders = (i18n) => [
+  { text: i18n.t('headers.name'), value: 'name' },
+  { text: i18n.t('headers.creationDate'), value: 'date' },
+  { text: i18n.t('headers.editionDate'), value: 'edition_date' },
+  { text: i18n.t('headers.tasks'), value: 'tasks' },
 ];
