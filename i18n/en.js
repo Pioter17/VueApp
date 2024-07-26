@@ -48,6 +48,7 @@ const eng = {
     noWhitespace: 'Name must contain not only whitespace',
     tooLong: 'Name length cannot exceed 15 characters',
   },
+  noData: 'There is no data available',
   headers: {
     name: 'Name',
     creationDate: 'Creation date',
@@ -57,6 +58,8 @@ const eng = {
     application: 'Application',
     apps: 'Applications',
   },
+  itemsAllText: 'All',
+  itemsPerPage: 'Rows per page',
   goBack: 'Go back',
   goToTasks: 'Go to tasks',
   goToApplications: 'Go to applications',

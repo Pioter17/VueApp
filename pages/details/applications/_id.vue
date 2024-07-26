@@ -20,77 +20,30 @@
     >
       {{ $t(warningMessage) }}
     </the-delete-dialog>
-    <v-card
-      outlined
-      elevation="10"
-      width="1200"
-      height="750"
-      class="mx-auto mt-16 pa-10"
+    <the-details-display-card
+      :itemDetails="appDetails"
+      goToDest="/applications"
+      :cameFrom="cameFromApplications"
+      goToMessage="goToApplications"
+      @delete-item="deleteApplication"
+      @update-item="updateApplication"
+      updateItemMessage="updateApplication"
+      deleteItemMessage="deleteApplication"
     >
-      <v-row class="d-flex justify-space-between mb-12">
-        <div class="d-flex flex-column">
-          <v-card-actions class="d-flex align-center" style="gap: 20px">
-            <v-btn @click="goBack">{{ $t('goBack') }}</v-btn>
-            <v-btn v-if="!cameFromApplications" @click="goToApplications">{{
-              $t('goToApplications')
-            }}</v-btn>
-          </v-card-actions>
-          <v-card-title primary-title class="text-h2 mb-4">
-            {{ appDetails.name }}
-          </v-card-title>
-          <v-card-subtitle class="text-h5 mt-2">
-            {{ $t('creationDate') }}: {{ appDetails.date }}
-          </v-card-subtitle>
-          <v-card-subtitle class="text-h5">
-            {{ $t('editionDate') }}: {{ appDetails.edition_date }}
-          </v-card-subtitle>
-          <v-card-text>
-            <nuxt-link
-              class="text-h6"
-              :to="'/details/servers/' + appDetails.serverId"
-            >
-              {{ $t('server') }}: {{ appDetails.server }}
-            </nuxt-link>
-          </v-card-text>
-        </div>
-        <div height="200" class="d-flex align-center">
-          <v-card-actions
-            class="action__buttons d-flex flex-column"
-            style="gap: 20px"
+      <template #default>
+        <v-card-text>
+          <nuxt-link
+            class="text-h6"
+            :to="'/details/servers/' + appDetails.serverId"
           >
-            <v-btn color="info" block large @click="updateApplication">
-              {{ $t('updateApplication') }}
-            </v-btn>
-            <v-btn
-              color="error"
-              class="ml-0"
-              block
-              large
-              @click="deleteApplication"
-            >
-              {{ $t('deleteApplication') }}
-            </v-btn>
-          </v-card-actions>
-        </div>
-      </v-row>
-      <v-row>
-        <v-data-table
-          :headers="headers"
-          height="250px"
-          :items="appDetails.tasks"
-          class="full__width"
-        >
-          <template v-slot:item="{ item }">
-            <tr @click="showTaskDetails(item.id)" class="clickable__row">
-              <td>{{ item.name }}</td>
-              <td>{{ item.date }}</td>
-              <td>{{ item.edition_date }}</td>
-              <td>{{ item.server }}</td>
-            </tr>
-          </template>
-        </v-data-table>
-      </v-row>
-    </v-card>
+            {{ $t('server') }}: {{ appDetails.server }}
+          </nuxt-link>
+        </v-card-text>
+      </template>
+      <template #secondRow>
+        <app-details :headers="headers" :appDetails="appDetails"></app-details>
+      </template>
+    </the-details-display-card>
   </div>
 </template>
 
@@ -99,9 +52,17 @@ import TheDeleteDialog from '@UI/components/TheDeleteDialog.vue';
 import TheFormDialog from '@UI/components/TheFormDialog.vue';
 import addNewAppForm from '@components/addNewAppForm.vue';
 import { getApplicationDetailsHeaders } from '@/core/constants/headers';
+import TheDetailsDisplayCard from '@UI/components/TheDetailsDisplayCard.vue';
+import AppDetails from '@components/appDetails.vue';
 
 export default {
-  components: { TheDeleteDialog, TheFormDialog, addNewAppForm },
+  components: {
+    TheDeleteDialog,
+    TheFormDialog,
+    addNewAppForm,
+    TheDetailsDisplayCard,
+    AppDetails,
+  },
   data() {
     return {
       warningMessage: 'applicationsPage.warning',
@@ -159,15 +120,6 @@ export default {
             ).name,
           };
         });
-    },
-    showTaskDetails(taskId) {
-      this.$router.push('/details/tasks/' + taskId);
-    },
-    goBack() {
-      this.$router.back();
-    },
-    goToApplications() {
-      this.$router.push('/applications');
     },
     setCameFromApplications(value) {
       this.cameFromApplications = value;
@@ -242,14 +194,3 @@ export default {
   },
 };
 </script>
-
-<style scoped>
-.action__buttons {
-  gap: 20px;
-  width: 300px;
-}
-
-.full__width {
-  width: 100%;
-}
-</style>

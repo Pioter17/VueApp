@@ -18,67 +18,18 @@
       :dialogDelete="dialogDelete"
       :itemName="taskDetails.name"
     ></the-delete-dialog>
-    <v-card
-      outlined
-      elevation="10"
-      width="800"
-      height="500"
-      class="mx-auto mt-16 pa-6"
+    <the-details-display-card
+      :itemDetails="taskDetails"
+      goToDest="/tasks"
+      :cameFrom="cameFromTasks"
+      goToMessage="goToTasks"
+      @delete-item="deleteTask"
+      @update-item="updateTask"
+      updateItemMessage="updateTask"
+      deleteItemMessage="deleteTask"
     >
-      <v-row>
-        <v-col cols="8">
-          <v-card-actions class="d-flex align-center" style="gap: 20px">
-            <v-btn @click="goBack">{{ $t('goBack') }}</v-btn>
-            <v-btn v-if="!cameFromTasks" @click="goToTasks">{{
-              $t('goToTasks')
-            }}</v-btn>
-          </v-card-actions>
-          <v-card-title primary-title class="text-h2 mb-4">
-            {{ taskDetails.name }}
-          </v-card-title>
-          <v-card-subtitle class="text-h5 mt-6">
-            {{ $t('creationDate') }}: {{ taskDetails.date }}
-          </v-card-subtitle>
-          <v-card-subtitle class="text-h5">
-            {{ $t('editionDate') }}: {{ taskDetails.edition_date }}
-          </v-card-subtitle>
-          <v-card-text class="d-flex flex-column">
-            <nuxt-link
-              class="text-h6"
-              :to="'/details/servers/' + taskDetails.serverId"
-            >
-              {{ $t('server') }}: {{ taskDetails.server }}
-            </nuxt-link>
-            <nuxt-link
-              class="text-h6"
-              v-if="taskDetails.applicationId"
-              :to="'/details/applications/' + taskDetails.applicationId"
-            >
-              {{ $t('application') }}: {{ taskDetails.application }}
-            </nuxt-link>
-            <div v-else>
-              <p class="text-h6">
-                {{ $t('tasksPage.taskNotAssigned') }}
-              </p>
-              <!-- <v-btn color="success">Attach to application</v-btn> -->
-            </div>
-          </v-card-text>
-        </v-col>
-        <v-col>
-          <v-card-actions
-            class="d-flex flex-column align-center justify-center"
-            style="gap: 20px"
-          >
-            <v-btn color="info" @click="updateTask" block large>
-              {{ $t('updateTask') }}
-            </v-btn>
-            <v-btn color="error" class="ml-0" @click="deleteTask" block large>
-              {{ $t('deleteTask') }}
-            </v-btn>
-          </v-card-actions>
-        </v-col>
-      </v-row>
-    </v-card>
+      <task-details :taskDetails="taskDetails"></task-details>
+    </the-details-display-card>
   </div>
 </template>
 
@@ -86,9 +37,17 @@
 import TheDeleteDialog from '@UI/components/TheDeleteDialog.vue';
 import TheFormDialog from '@UI/components/TheFormDialog.vue';
 import addNewTaskForm from '@components/addNewTaskForm.vue';
+import TheDetailsDisplayCard from '@UI/components/TheDetailsDisplayCard.vue';
+import TaskDetails from '@components/taskDetails.vue';
 
 export default {
-  components: { TheDeleteDialog, TheFormDialog, addNewTaskForm },
+  components: {
+    TheDeleteDialog,
+    TheFormDialog,
+    addNewTaskForm,
+    TheDetailsDisplayCard,
+    TaskDetails,
+  },
   data() {
     return {
       tab: 0,
@@ -129,12 +88,6 @@ export default {
   methods: {
     setTVar() {
       this.$i18n.locale = this.$store.getters.getLocale;
-    },
-    goBack() {
-      this.$router.back();
-    },
-    goToTasks() {
-      this.$router.push('/tasks');
     },
     setCameFromTasks(value) {
       this.cameFromTasks = value;

@@ -24,7 +24,7 @@
       item-text="name"
       :label="$t('forms.attachToApplication')"
       return-object
-      :no-data-text="$t('forms.emptyServer')"
+      :no-data-text="$t('forms.emptyServerApp')"
     ></v-select>
   </v-form>
 </template>

@@ -46,6 +46,7 @@ const pol = {
     noWhitespace: 'Nazwa nie może zawierać tylko białych znaków',
     tooLong: 'Nazwa nie może mieć więcej niż 15 znaków',
   },
+  noData: 'Dane nie są dostępne',
   headers: {
     name: 'Nazwa',
     creationDate: 'Data utworzenia',
@@ -55,6 +56,8 @@ const pol = {
     application: 'Aplikacja',
     apps: 'Aplikacje',
   },
+  itemsAllText: 'Wszystkie',
+  itemsPerPage: 'Wiersze na stronę',
   goBack: 'Wróć',
   goToTasks: 'Przejdź do zadań',
   goToApplications: 'Przejdź do aplikacji',

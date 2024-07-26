@@ -1,5 +1,11 @@
 <template>
-  <v-data-table :headers="headers" height="60vh" :items="filteredData">
+  <v-data-table
+    :headers="headers"
+    height="60vh"
+    :items="filteredData"
+    :no-data-text="$t('noData')"
+    :footer-props="footerProps"
+  >
     <template v-slot:top>
       <v-toolbar flat class="mb-10">
         <v-col cols="10" sm="3" class="pa-4 pl-0">
@@ -59,6 +65,7 @@
 
 <script>
 import { filterData } from '@pages/utils/functions/data-filter';
+import { getFooter } from '@core/constants/footer';
 
 export default {
   inject: ['itemType', 'backLink'],
@@ -80,6 +87,9 @@ export default {
         this.searchTask,
         this.itemType
       );
+    },
+    footerProps() {
+      return getFooter(this.$i18n);
     },
   },
   methods: {
