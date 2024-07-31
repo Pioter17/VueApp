@@ -25,6 +25,18 @@ export default {
       state.tasks = state.tasks.filter((task) => task.id != payload.taskId);
     },
     removeAllServerTasks(state, payload) {
+      state.tasks.forEach((task) => {
+        if (task.serverId == payload.serverId) {
+          axios
+            .delete('https://localhost:7092/api/Task?id=' + task.id)
+            .then(function (response) {
+              console.log(response);
+            })
+            .catch(function (error) {
+              console.log(error);
+            });
+        }
+      });
       state.tasks = state.tasks.filter(
         (task) => task.serverId != payload.serverId
       );
@@ -60,15 +72,39 @@ export default {
     },
     saveTask(context, newItem) {
       context.commit('addTask', { newItem: newItem });
+      axios
+        .post('https://localhost:7092/api/Task', newItem)
+        .then(function (response) {
+          console.log(response);
+        })
+        .catch(function (error) {
+          console.log(error);
+        });
     },
     updateTask(context, payload) {
       context.commit('putTask', {
         newItem: payload.newItem,
         index: payload.index,
       });
+      axios
+        .put('https://localhost:7092/api/Task', payload.newItem)
+        .then(function (response) {
+          console.log(response);
+        })
+        .catch(function (error) {
+          console.log(error);
+        });
     },
     deleteTask(context, taskId) {
       context.commit('removeTask', { taskId: taskId });
+      axios
+        .delete('https://localhost:7092/api/Task?id=' + taskId)
+        .then(function (response) {
+          console.log(response);
+        })
+        .catch(function (error) {
+          console.log(error);
+        });
     },
   },
 };

@@ -29,6 +29,18 @@ export default {
       );
     },
     removeAllServerApplications(state, payload) {
+      state.applications.forEach((app) => {
+        if (app.serverId == payload.serverId) {
+          axios
+            .delete('https://localhost:7092/api/App?id=' + app.id)
+            .then(function (response) {
+              console.log(response);
+            })
+            .catch(function (error) {
+              console.log(error);
+            });
+        }
+      });
       state.applications = state.applications.filter(
         (app) => app.serverId != payload.serverId
       );
@@ -48,6 +60,14 @@ export default {
         newItem: newItem,
       });
       context.commit('addApplication', { newItem: newItem });
+      axios
+        .post('https://localhost:7092/api/App', newItem)
+        .then(function (response) {
+          console.log(response);
+        })
+        .catch(function (error) {
+          console.log(error);
+        });
     },
     updateApplication(context, payload) {
       context.commit('detachTasksFromApplication', {
@@ -60,10 +80,26 @@ export default {
         newItem: payload.newItem,
         index: payload.index,
       });
+      axios
+        .put('https://localhost:7092/api/App', payload.newItem)
+        .then(function (response) {
+          console.log(response);
+        })
+        .catch(function (error) {
+          console.log(error);
+        });
     },
     deleteApplication(context, appId) {
       context.commit('removeApplication', { appId: appId });
       context.commit('detachTasksFromApplication', { appId: appId });
+      axios
+        .delete('https://localhost:7092/api/App?id=' + appId)
+        .then(function (response) {
+          console.log(response);
+        })
+        .catch(function (error) {
+          console.log(error);
+        });
     },
   },
 };

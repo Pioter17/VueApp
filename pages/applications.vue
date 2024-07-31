@@ -54,7 +54,7 @@ export default {
       const data = this.$store.getters.getApps;
       const newData = [];
       data.forEach((element) => {
-        console.log({ ...element });
+        // console.log({ ...element });
         element = {
           ...element,
           server: this.$store.getters.getServers.find(
@@ -122,7 +122,7 @@ export default {
           id: this.apps[this.editedIndex].id,
           name: this.editedItem.itemName.trim(),
           date: this.apps[this.editedIndex].date,
-          edition_date: new Date().toISOString().split('T')[0],
+          edition: new Date().toISOString().split('T')[0],
           server: this.editedItem.attachedServer.name,
           serverId: this.editedItem.attachedServer.id,
           tasks: this.editedItem.attachedTasks,
@@ -136,7 +136,7 @@ export default {
           id: generateID(30),
           name: this.editedItem.itemName.trim(),
           date: new Date().toISOString().split('T')[0],
-          edition_date: new Date().toISOString().split('T')[0],
+          edition: new Date().toISOString().split('T')[0],
           server: this.editedItem.attachedServer.name,
           serverId: this.editedItem.attachedServer.id,
           tasks: this.editedItem.attachedTasks,

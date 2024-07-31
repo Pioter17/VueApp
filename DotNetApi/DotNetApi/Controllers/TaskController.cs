@@ -25,13 +25,12 @@ namespace DotNetApi.Controllers
         t.Id,
         t.Name,
         t.Date, // Obsłuż `NULL` w Date
-        t.Edition, // Obsłuż `NULL` w EditionDate
+        Edition = t.Edition ?? null, // Obsłuż `NULL` w EditionDate
         t.Server,
         Application = t.Application ?? null,
         t.ServerId,
         ApplicationId = t.ApplicationId ?? null,
-      })
-                              .ToListAsync(); ;
+      }).ToListAsync(); ;
       return Ok(tasks);
     }
 
@@ -50,10 +49,14 @@ namespace DotNetApi.Controllers
     [HttpPost]
     public async Task<ActionResult<List<AppTask>>> AddTask([FromBody]AppTask task)
     {
+      if (task == null)
+      {
+        return BadRequest();
+      }
       _context.Add(task);
       await _context.SaveChangesAsync();
 
-      return Ok(await _context.Tasks.ToListAsync());
+      return Ok();
     }
 
     [HttpPut]
@@ -73,7 +76,7 @@ namespace DotNetApi.Controllers
 
       await _context.SaveChangesAsync();
 
-      return Ok(await _context.Tasks.ToListAsync());
+      return Ok();
     }
 
     [HttpDelete]
@@ -86,7 +89,7 @@ namespace DotNetApi.Controllers
       _context.Tasks.Remove(dbTask);
       await _context.SaveChangesAsync();
 
-      return Ok(await _context.Tasks.ToListAsync());
+      return Ok();
     }
   }
 }

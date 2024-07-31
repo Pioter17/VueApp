@@ -166,7 +166,7 @@ export default {
           id: this.appDetails.id,
           name: this.editedItem.itemName,
           date: this.appDetails.date,
-          edition_date: new Date().toISOString().split('T')[0],
+          edition: new Date().toISOString().split('T')[0],
           server: this.editedItem.attachedServer.name,
           serverId: this.editedItem.attachedServer.id,
           tasks: this.editedItem.attachedTasks,

@@ -50,12 +50,12 @@ export default {
   computed: {
     items() {
       return this.$store.getters.getTasks.map((task) => {
-        console.log({ ...task });
+        // console.log({ ...task });
+        const dupa = this.$store.getters.getServers;
+        // console.log({ ...dupa[0] });
         return {
           ...task,
-          server: this.$store.getters.getServers.find(
-            (server) => server.id == task.serverId
-          ).name,
+          server: dupa.filter((server) => server.id == task.serverId)[0].name,
         };
       });
     },
@@ -105,7 +105,7 @@ export default {
           id: this.items[this.editedIndex].id,
           name: this.editedItem.itemName.trim(),
           date: this.items[this.editedIndex].date,
-          edition_date: new Date().toISOString().split('T')[0],
+          edition: new Date().toISOString().split('T')[0],
           server: this.editedItem.attachedServer.name,
           application: this.editedItem.attachedApplication
             ? this.editedItem.attachedApplication.name
@@ -124,7 +124,7 @@ export default {
           id: generateID(30),
           name: this.editedItem.itemName.trim(),
           date: new Date().toISOString().split('T')[0],
-          edition_date: new Date().toISOString().split('T')[0],
+          edition: new Date().toISOString().split('T')[0],
           server: this.editedItem.attachedServer.name,
           application: this.editedItem.attachedApplication
             ? this.editedItem.attachedApplication.name

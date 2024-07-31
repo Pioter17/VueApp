@@ -38,17 +38,41 @@ export default {
     },
     saveServer(context, newItem) {
       context.commit('addServer', { newItem: newItem });
+      axios
+        .post('https://localhost:7092/api/Server', newItem)
+        .then(function (response) {
+          console.log(response);
+        })
+        .catch(function (error) {
+          console.log(error);
+        });
     },
     updateServer(context, payload) {
       context.commit('putServer', {
         newItem: payload.newItem,
         index: payload.index,
       });
+      axios
+        .put('https://localhost:7092/api/Server', payload.newItem)
+        .then(function (response) {
+          console.log(response);
+        })
+        .catch(function (error) {
+          console.log(error);
+        });
     },
     deleteServer(context, serverId) {
       context.commit('removeAllServerTasks', { serverId: serverId });
       context.commit('removeAllServerApplications', { serverId: serverId });
       context.commit('removeServer', { serverId: serverId });
+      axios
+        .delete('https://localhost:7092/api/Server?id=' + serverId)
+        .then(function (response) {
+          console.log(response);
+        })
+        .catch(function (error) {
+          console.log(error);
+        });
     },
   },
 };

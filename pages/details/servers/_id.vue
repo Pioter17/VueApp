@@ -82,7 +82,7 @@ export default {
         id: server.id,
         name: server.name,
         date: server.date,
-        edition_date: server.edition_date,
+        edition: server.edition_date,
         applications: this.getApplicationsList(server.id),
         tasks: this.getTasksList(server.id),
       };

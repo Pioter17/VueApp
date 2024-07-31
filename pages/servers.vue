@@ -49,7 +49,7 @@ export default {
       const data = this.$store.getters.getServers;
       const newData = [];
       data.forEach((element) => {
-        console.log({ ...element });
+        // console.log({ ...element });
         element = {
           ...element,
           count: i,
@@ -57,7 +57,7 @@ export default {
         newData.push(element);
         i++;
       });
-      console.log(...newData);
+      // console.log(...newData);
       return newData;
     },
     applications() {
@@ -115,7 +115,7 @@ export default {
           id: this.servers[this.editedIndex].id,
           name: this.editedItem.itemName.trim(),
           date: this.servers[this.editedIndex].date,
-          edition_date: new Date().toISOString().split('T')[0],
+          edition: new Date().toISOString().split('T')[0],
         };
         this.$store.dispatch('updateServer', {
           newItem: serverToUpdate,
@@ -126,7 +126,7 @@ export default {
           id: generateID(30),
           name: this.editedItem.itemName.trim(),
           date: new Date().toISOString().split('T')[0],
-          edition_date: new Date().toISOString().split('T')[0],
+          edition: new Date().toISOString().split('T')[0],
         };
         this.$store.dispatch('saveServer', newServer);
       }

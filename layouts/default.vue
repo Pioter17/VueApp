@@ -58,6 +58,7 @@ export default {
     },
   },
   mounted() {
+    console.log('dupa');
     this.$store.dispatch('fetchServers');
     this.$store.dispatch('fetchTasks');
     this.$store.dispatch('fetchApps');
