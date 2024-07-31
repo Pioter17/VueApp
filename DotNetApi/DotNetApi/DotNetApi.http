@@ -1,0 +1,23 @@
+@DotNetApi_HostAddress = https://localhost:7092
+
+GET {{DotNetApi_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
+
+GET {{DotNetApi_HostAddress}}/weatherforecast
+
+###
+
+GET {{DotNetApi_HostAddress}}/api/task
+
+###
+
+POST {{DotNetApi_HostAddress}}/api/task
+Content-Type: application/json
+
+{
+  //AppTask
+}
+
+###

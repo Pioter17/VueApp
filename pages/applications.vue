@@ -54,6 +54,7 @@ export default {
       const data = this.$store.getters.getApps;
       const newData = [];
       data.forEach((element) => {
+        console.log({ ...element });
         element = {
           ...element,
           server: this.$store.getters.getServers.find(

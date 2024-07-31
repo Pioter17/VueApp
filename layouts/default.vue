@@ -57,6 +57,11 @@ export default {
       this.$store.dispatch('changeLang', lang);
     },
   },
+  mounted() {
+    this.$store.dispatch('fetchServers');
+    this.$store.dispatch('fetchTasks');
+    this.$store.dispatch('fetchApps');
+  },
 };
 </script>
 

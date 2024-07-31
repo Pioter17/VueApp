@@ -49,6 +49,7 @@ export default {
       const data = this.$store.getters.getServers;
       const newData = [];
       data.forEach((element) => {
+        console.log({ ...element });
         element = {
           ...element,
           count: i,
@@ -56,6 +57,7 @@ export default {
         newData.push(element);
         i++;
       });
+      console.log(...newData);
       return newData;
     },
     applications() {

@@ -1,9 +1,9 @@
-import data from '@static/data/servers.json';
+import axios from 'axios';
 
 export default {
   state() {
     return {
-      servers: data,
+      servers: [],
     };
   },
   getters: {
@@ -12,6 +12,9 @@ export default {
     },
   },
   mutations: {
+    setServers(state, payload) {
+      state.servers = payload.servers;
+    },
     addServer(state, payload) {
       state.servers.push(payload.newItem);
     },
@@ -25,6 +28,14 @@ export default {
     },
   },
   actions: {
+    async fetchServers(context) {
+      try {
+        const response = await axios.get('https://localhost:7092/api/Server');
+        context.commit('setServers', { servers: response.data });
+      } catch (error) {
+        console.error('Error fetching servers:', error);
+      }
+    },
     saveServer(context, newItem) {
       context.commit('addServer', { newItem: newItem });
     },

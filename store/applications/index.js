@@ -1,9 +1,9 @@
-import data from '@static/data/applications.json';
+import axios from 'axios';
 
 export default {
   state() {
     return {
-      applications: data,
+      applications: [],
     };
   },
   getters: {
@@ -12,6 +12,9 @@ export default {
     },
   },
   mutations: {
+    setApps(state, payload) {
+      state.applications = payload.apps;
+    },
     addApplication(state, payload) {
       payload.newItem.tasks = payload.newItem.tasks.length;
       state.applications.push(payload.newItem);
@@ -32,6 +35,14 @@ export default {
     },
   },
   actions: {
+    async fetchApps(context) {
+      try {
+        const response = await axios.get('https://localhost:7092/api/App');
+        context.commit('setApps', { apps: response.data });
+      } catch (error) {
+        console.error('Error fetching servers:', error);
+      }
+    },
     saveApplication(context, newItem) {
       context.commit('reattachTasksToNewApplication', {
         newItem: newItem,

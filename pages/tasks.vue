@@ -50,6 +50,7 @@ export default {
   computed: {
     items() {
       return this.$store.getters.getTasks.map((task) => {
+        console.log({ ...task });
         return {
           ...task,
           server: this.$store.getters.getServers.find(

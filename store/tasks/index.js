@@ -1,9 +1,9 @@
-import data from '@static/data/tasks.json';
+import axios from 'axios';
 
 export default {
   state() {
     return {
-      tasks: data,
+      tasks: [],
     };
   },
   getters: {
@@ -12,6 +12,9 @@ export default {
     },
   },
   mutations: {
+    setTasks(state, payload) {
+      state.tasks = payload.tasks;
+    },
     addTask(state, payload) {
       state.tasks.push(payload.newItem);
     },
@@ -47,6 +50,14 @@ export default {
     },
   },
   actions: {
+    async fetchTasks(context) {
+      try {
+        const response = await axios.get('https://localhost:7092/api/Task');
+        context.commit('setTasks', { tasks: response.data });
+      } catch (error) {
+        console.error('Error fetching servers:', error);
+      }
+    },
     saveTask(context, newItem) {
       context.commit('addTask', { newItem: newItem });
     },
