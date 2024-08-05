@@ -18,10 +18,64 @@ namespace DotNetApi.Controllers
     }
 
     [HttpGet]
-    public async Task<ActionResult<List<Application>>> GetAllApps()
+    public async Task<ActionResult> GetAllApps(
+    int pageNumber = 1,
+    int pageSize = 10,
+    string serverName = "",
+    string applicationName = "")
     {
-      var apps = await _context.Apps.ToListAsync();
-      return Ok(apps);
+      // Filtruj aplikacje na podstawie przekazanych kryteriów
+      var appsQuery = _context.Apps.AsQueryable();
+
+      if (!string.IsNullOrWhiteSpace(serverName))
+      {
+        appsQuery = appsQuery.Where(a => a.Server.ToLower().Contains(serverName.ToLower()));
+      }
+
+      if (!string.IsNullOrWhiteSpace(applicationName))
+      {
+        appsQuery = appsQuery.Where(a => a.Name.ToLower().Contains(applicationName.ToLower()));
+      }
+
+      if (pageSize == -1)
+      {
+        var allApps = await appsQuery.ToListAsync();
+        var response = new
+        {
+          TotalItems = allApps.Count(),
+          TotalPages = 1,
+          CurrentPage = 1,
+          PageSize = allApps.Count,
+          Applications = allApps
+        };
+        return Ok(response);
+      }
+      else
+      {
+        if (pageNumber <= 0 || pageSize <= 0)
+        {
+          return BadRequest("Page number and page size must be greater than zero.");
+        }
+
+        var totalApps = await appsQuery.CountAsync();
+        var totalPages = (int)Math.Ceiling(totalApps / (double)pageSize);
+
+        var apps = await appsQuery
+                            .Skip((pageNumber - 1) * pageSize)
+                            .Take(pageSize)
+                            .ToListAsync();
+
+        var response = new
+        {
+          TotalItems = totalApps,
+          TotalPages = totalPages,
+          CurrentPage = pageNumber,
+          PageSize = pageSize,
+          Applications = apps
+        };
+
+        return Ok(response);
+      }
     }
 
     [HttpGet]

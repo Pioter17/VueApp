@@ -28,16 +28,29 @@ export default {
     },
   },
   actions: {
-    async fetchServers(context) {
+    async fetchServers(context, data) {
       try {
-        const response = await axios.get('https://localhost:7092/api/Server');
-        context.commit('setServers', { servers: response.data });
+        const pagination = data.pagination;
+        const search = data.search;
+        const response = await axios.get('https://localhost:7092/api/Server', {
+          params: {
+            pageNumber: pagination[0],
+            pageSize: pagination[1],
+            serverName: search[0],
+          },
+        });
+        context.commit('setServers', { servers: response.data.servers });
+        context.commit('setTotalItems', {
+          totalItems: response.data.totalItems,
+        });
+        context.commit('setTotalPages', {
+          totalPages: response.data.totalPages,
+        });
       } catch (error) {
         console.error('Error fetching servers:', error);
       }
     },
-    saveServer(context, newItem) {
-      context.commit('addServer', { newItem: newItem });
+    saveServer(newItem) {
       axios
         .post('https://localhost:7092/api/Server', newItem)
         .then(function (response) {

@@ -17,47 +17,6 @@ namespace DotNetApi.Controllers
       _context = context;
     }
 
-    //[HttpGet]
-    //public async Task<ActionResult<List<AppTask>>> GetAllTasks(int pageNumber = 1, int pageSize = 10, string serverName = "", string applicationName = "", string taskName = "")
-    //{
-    //  if (pageSize == -1)
-    //  {
-    //    var allTasks = await _context.Tasks.ToListAsync();
-    //    var all = new
-    //    {
-    //      TotalItems = allTasks.Count(),
-    //      TotalPages = 1,
-    //      CurrentPage = pageNumber,
-    //      PageSize = pageSize,
-    //      Tasks = allTasks
-    //    };
-    //    return Ok(all);
-    //  }
-    //  if (pageNumber <= 0 || pageSize <= 0)
-    //  {
-    //    return BadRequest("Page number and page size must be greater than zero.");
-    //  }
-
-    //  var totalTasks = await _context.Tasks.CountAsync();
-    //  var totalPages = (int)Math.Ceiling(totalTasks / (double)pageSize);
-
-    //  var tasks = await _context.Tasks
-    //                            .Skip((pageNumber - 1) * pageSize)
-    //                            .Take(pageSize)
-    //                            .ToListAsync();
-
-    //  var response = new
-    //  {
-    //    TotalItems = totalTasks,
-    //    TotalPages = totalPages,
-    //    CurrentPage = pageNumber,
-    //    PageSize = pageSize,
-    //    Tasks = tasks
-    //  };
-
-    //  return Ok(response);
-    //}
-
     [HttpGet]
     public async Task<ActionResult> GetAllTasks(
       int pageNumber = 1,
@@ -67,7 +26,6 @@ namespace DotNetApi.Controllers
       string taskName = ""
     )
     {
-      // Filtruj zadania na podstawie przekazanych kryteriów
       var tasksQuery = _context.Tasks.AsQueryable();
 
       if (!string.IsNullOrWhiteSpace(serverName))
@@ -125,8 +83,6 @@ namespace DotNetApi.Controllers
         return Ok(response);
       }
     }
-
-
 
     [HttpPost]
     public async Task<ActionResult<List<AppTask>>> AddTask([FromBody]AppTask task)

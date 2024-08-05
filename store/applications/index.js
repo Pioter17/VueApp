@@ -47,19 +47,30 @@ export default {
     },
   },
   actions: {
-    async fetchApps(context) {
+    async fetchApps(context, data) {
       try {
-        const response = await axios.get('https://localhost:7092/api/App');
-        context.commit('setApps', { apps: response.data });
+        const pagination = data.pagination;
+        const search = data.search;
+        const response = await axios.get('https://localhost:7092/api/App', {
+          params: {
+            pageNumber: pagination[0],
+            pageSize: pagination[1],
+            serverName: search[0],
+            applicationName: search[1],
+          },
+        });
+        context.commit('setApps', { apps: response.data.applications });
+        context.commit('setTotalItems', {
+          totalItems: response.data.totalItems,
+        });
+        context.commit('setTotalPages', {
+          totalPages: response.data.totalPages,
+        });
       } catch (error) {
         console.error('Error fetching servers:', error);
       }
     },
-    saveApplication(context, newItem) {
-      context.commit('reattachTasksToNewApplication', {
-        newItem: newItem,
-      });
-      context.commit('addApplication', { newItem: newItem });
+    saveApplication(newItem) {
       axios
         .post('https://localhost:7092/api/App', newItem)
         .then(function (response) {

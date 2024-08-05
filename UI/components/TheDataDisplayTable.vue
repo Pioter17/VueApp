@@ -72,7 +72,7 @@ import { filterData } from '@pages/utils/functions/data-filter';
 import { getFooter } from '@core/constants/footer';
 
 export default {
-  inject: ['itemType', 'backLink'],
+  inject: ['itemType', 'backLink', 'fetchFunction'],
   props: ['openDialog', 'data', 'lastColumn', 'secondLastColumn', 'headers'],
   $emits: ['open-delete', 'open-form'],
   data() {
@@ -110,14 +110,14 @@ export default {
     searchParams: {
       handler: 'fetchData',
       deep: true,
-      immediate: true,
+      // immediate: true,
     },
   },
   methods: {
     fetchData() {
       this.loading = true;
       this.$store
-        .dispatch('fetchTasks', {
+        .dispatch(this.fetchFunction, {
           pagination: [this.options.page, this.options.itemsPerPage],
           search: [
             this.searchParams.searchServer,

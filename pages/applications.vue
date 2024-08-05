@@ -46,6 +46,7 @@ export default {
       backLink: '/details/applications/',
       itemType: 'application',
       headers: this.headers,
+      fetchFunction: 'fetchApps',
     };
   },
   computed: {
@@ -53,6 +54,7 @@ export default {
       let i = 0;
       const data = this.$store.getters.getApps;
       const newData = [];
+      console.log({ ...data });
       data.forEach((element) => {
         // console.log({ ...element });
         element = {
@@ -145,10 +147,17 @@ export default {
       }
       this.close();
     },
+    fetch() {
+      this.$store.dispatch('fetchApps', {
+        pagination: [1, 10],
+        search: ['', '', ''],
+      });
+    },
   },
   beforeRouteEnter(_, from, next) {
     next((vm) => {
       vm.setTVar();
+      // vm.fetch();
     });
   },
 };

@@ -41,6 +41,7 @@ export default {
     return {
       backLink: '/details/servers/',
       itemType: 'server',
+      fetchFunction: 'fetchServers',
     };
   },
   computed: {
@@ -132,10 +133,17 @@ export default {
       }
       this.close();
     },
+    fetch() {
+      this.$store.dispatch('fetchServers', {
+        pagination: [1, 10],
+        search: ['', '', ''],
+      });
+    },
   },
   beforeRouteEnter(_, from, next) {
     next((vm) => {
       vm.setTVar();
+      // vm.fetch();
     });
   },
 };

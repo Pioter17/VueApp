@@ -86,8 +86,7 @@ export default {
         console.error('Error fetching servers:', error);
       }
     },
-    saveTask(context, newItem) {
-      context.commit('addTask', { newItem: newItem });
+    saveTask(newItem) {
       axios
         .post('https://localhost:7092/api/Task', newItem)
         .then(function (response) {

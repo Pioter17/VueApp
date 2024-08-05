@@ -45,6 +45,7 @@ export default {
       backLink: '/details/tasks/',
       itemType: 'task',
       headers: this.headers,
+      fetchFunction: 'fetchTasks',
     };
   },
   computed: {
@@ -137,10 +138,17 @@ export default {
         this.$store.dispatch('saveTask', newTask);
       }
     },
+    fetch() {
+      this.$store.dispatch('fetchTasks', {
+        pagination: [1, 10],
+        search: ['', '', ''],
+      });
+    },
   },
   beforeRouteEnter(_, from, next) {
     next((vm) => {
       vm.setTVar();
+      // vm.fetch();
     });
   },
 };
