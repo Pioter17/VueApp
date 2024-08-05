@@ -76,10 +76,6 @@ export default {
       context.commit('reattachTasksToNewApplication', {
         newItem: payload.newItem,
       });
-      context.commit('putApplication', {
-        newItem: payload.newItem,
-        index: payload.index,
-      });
       axios
         .put('https://localhost:7092/api/App', payload.newItem)
         .then(function (response) {
@@ -88,6 +84,10 @@ export default {
         .catch(function (error) {
           console.log(error);
         });
+      context.commit('putApplication', {
+        newItem: payload.newItem,
+        index: payload.index,
+      });
     },
     deleteApplication(context, appId) {
       context.commit('removeApplication', { appId: appId });

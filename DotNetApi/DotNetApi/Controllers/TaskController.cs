@@ -17,34 +17,116 @@ namespace DotNetApi.Controllers
       _context = context;
     }
 
-    [HttpGet]
-    public async Task<ActionResult<List<AppTask>>> GetAllTasks()
-    {
-      var tasks = await _context.Tasks.Select(t => new
-      {
-        t.Id,
-        t.Name,
-        t.Date, // Obsłuż `NULL` w Date
-        Edition = t.Edition ?? null, // Obsłuż `NULL` w EditionDate
-        t.Server,
-        Application = t.Application ?? null,
-        t.ServerId,
-        ApplicationId = t.ApplicationId ?? null,
-      }).ToListAsync(); ;
-      return Ok(tasks);
-    }
+    //[HttpGet]
+    //public async Task<ActionResult<List<AppTask>>> GetAllTasks(int pageNumber = 1, int pageSize = 10, string serverName = "", string applicationName = "", string taskName = "")
+    //{
+    //  if (pageSize == -1)
+    //  {
+    //    var allTasks = await _context.Tasks.ToListAsync();
+    //    var all = new
+    //    {
+    //      TotalItems = allTasks.Count(),
+    //      TotalPages = 1,
+    //      CurrentPage = pageNumber,
+    //      PageSize = pageSize,
+    //      Tasks = allTasks
+    //    };
+    //    return Ok(all);
+    //  }
+    //  if (pageNumber <= 0 || pageSize <= 0)
+    //  {
+    //    return BadRequest("Page number and page size must be greater than zero.");
+    //  }
+
+    //  var totalTasks = await _context.Tasks.CountAsync();
+    //  var totalPages = (int)Math.Ceiling(totalTasks / (double)pageSize);
+
+    //  var tasks = await _context.Tasks
+    //                            .Skip((pageNumber - 1) * pageSize)
+    //                            .Take(pageSize)
+    //                            .ToListAsync();
+
+    //  var response = new
+    //  {
+    //    TotalItems = totalTasks,
+    //    TotalPages = totalPages,
+    //    CurrentPage = pageNumber,
+    //    PageSize = pageSize,
+    //    Tasks = tasks
+    //  };
+
+    //  return Ok(response);
+    //}
 
     [HttpGet]
-    [Route("{id}")]
-    public async Task<ActionResult<AppTask>> GetTaskById(string id)
+    public async Task<ActionResult> GetAllTasks(
+      int pageNumber = 1,
+      int pageSize = 10,
+      string serverName = "",
+      string applicationName = "",
+      string taskName = ""
+    )
     {
-      var task = await _context.Tasks.FindAsync(id);
-      if (task == null)
+      // Filtruj zadania na podstawie przekazanych kryteriów
+      var tasksQuery = _context.Tasks.AsQueryable();
+
+      if (!string.IsNullOrWhiteSpace(serverName))
       {
-        return NotFound("Task not found");
+        tasksQuery = tasksQuery.Where(t => t.Server.ToLower().Contains(serverName.ToLower()));
       }
-      return Ok(task);
+
+      if (!string.IsNullOrWhiteSpace(applicationName))
+      {
+        tasksQuery = tasksQuery.Where(t => t.Application.ToLower().Contains(applicationName.ToLower()));
+      }
+
+      if (!string.IsNullOrWhiteSpace(taskName))
+      {
+        tasksQuery = tasksQuery.Where(t => t.Name.ToLower().Contains(taskName.ToLower()));
+      }
+
+      if (pageSize == -1)
+      {
+        var allTasks = await tasksQuery.ToListAsync();
+        var response = new
+        {
+          TotalItems = allTasks.Count(),
+          TotalPages = 1,
+          CurrentPage = 1,
+          PageSize = allTasks.Count,
+          Tasks = allTasks
+        };
+        return Ok(response);
+      }
+      else
+      {
+        if (pageNumber <= 0 || pageSize <= 0)
+        {
+          return BadRequest("Page number and page size must be greater than zero.");
+        }
+
+        var totalTasks = await tasksQuery.CountAsync();
+        var totalPages = (int)Math.Ceiling(totalTasks / (double)pageSize);
+
+        var tasks = await tasksQuery
+                            .Skip((pageNumber - 1) * pageSize)
+                            .Take(pageSize)
+                            .ToListAsync();
+
+        var response = new
+        {
+          TotalItems = totalTasks,
+          TotalPages = totalPages,
+          CurrentPage = pageNumber,
+          PageSize = pageSize,
+          Tasks = tasks
+        };
+
+        return Ok(response);
+      }
     }
+
+
 
     [HttpPost]
     public async Task<ActionResult<List<AppTask>>> AddTask([FromBody]AppTask task)
@@ -64,7 +146,7 @@ namespace DotNetApi.Controllers
     {
       var dbTask = await _context.Tasks.FindAsync(updatedTask.Id);
       if (dbTask == null)
-        return NotFound("Hero not found.");
+        return NotFound("Task not found.");
 
       dbTask.Name = updatedTask.Name;
       dbTask.Date = updatedTask.Date;
@@ -84,7 +166,7 @@ namespace DotNetApi.Controllers
     {
       var dbTask = await _context.Tasks.FindAsync(id);
       if (dbTask == null)
-        return NotFound("Hero not found.");
+        return NotFound("Task not found.");
 
       _context.Tasks.Remove(dbTask);
       await _context.SaveChangesAsync();

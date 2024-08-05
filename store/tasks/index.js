@@ -44,8 +44,8 @@ export default {
     detachTasksFromApplication(state, payload) {
       state.tasks.forEach((task) => {
         if (task.applicationId == payload.appId) {
-          task.application = null;
-          task.applicationId = null;
+          task.application = '';
+          task.applicationId = '';
         }
       });
     },
@@ -62,10 +62,26 @@ export default {
     },
   },
   actions: {
-    async fetchTasks(context) {
+    async fetchTasks(context, data) {
       try {
-        const response = await axios.get('https://localhost:7092/api/Task');
-        context.commit('setTasks', { tasks: response.data });
+        const pagination = data.pagination;
+        const search = data.search;
+        const response = await axios.get('https://localhost:7092/api/Task', {
+          params: {
+            pageNumber: pagination[0],
+            pageSize: pagination[1],
+            serverName: search[0],
+            applicationName: search[1],
+            taskName: search[2],
+          },
+        });
+        context.commit('setTasks', { tasks: response.data.tasks });
+        context.commit('setTotalItems', {
+          totalItems: response.data.totalItems,
+        });
+        context.commit('setTotalPages', {
+          totalPages: response.data.totalPages,
+        });
       } catch (error) {
         console.error('Error fetching servers:', error);
       }

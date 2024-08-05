@@ -31,7 +31,7 @@ namespace DotNetApi.Controllers
       var server = await _context.Servers.FindAsync(id);
       if (server == null)
       {
-        return NotFound("Application not found");
+        return NotFound("Server not found");
       }
       return Ok(server);
     }
@@ -50,13 +50,10 @@ namespace DotNetApi.Controllers
     {
       var dbServer = await _context.Servers.FindAsync(updatedServer.Id);
       if (dbServer == null)
-        return NotFound("Hero not found.");
+        return NotFound("Server not found.");
 
       dbServer.Name = updatedServer.Name;
-      dbServer.Date = updatedServer.Date;
       dbServer.Edition = updatedServer.Edition;
-      dbServer.Applications = updatedServer.Applications;
-      dbServer.Tasks = updatedServer.Tasks;
 
       await _context.SaveChangesAsync();
 
@@ -68,7 +65,7 @@ namespace DotNetApi.Controllers
     {
       var dbServer = await _context.Servers.FindAsync(id);
       if (dbServer == null)
-        return NotFound("Hero not found.");
+        return NotFound("Server not found.");
 
       _context.Servers.Remove(dbServer);
       await _context.SaveChangesAsync();

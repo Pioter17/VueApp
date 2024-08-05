@@ -17,14 +17,28 @@ export default () =>
     state() {
       return {
         locale: 'en',
+        totalItems: 0,
+        totalPages: 0,
       };
     },
     getters: {
       getLocale(state) {
         return state.locale;
       },
+      getTotalPages(state) {
+        return state.totalPages;
+      },
+      getTotalItems(state) {
+        return state.totalItems;
+      },
     },
     mutations: {
+      setTotalItems(state, payload) {
+        state.totalItems = payload.totalItems;
+      },
+      setTotalPages(state, payload) {
+        state.totalPages = payload.totalPages;
+      },
       setLocale(state, payload) {
         state.locale = payload.newLocale;
       },

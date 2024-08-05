@@ -37,27 +37,73 @@ namespace DotNetApi.Controllers
     }
 
     [HttpPost]
-    public async Task<ActionResult<List<Application>>> AddApplication([FromBody] Application app)
+    public async Task<ActionResult<List<Application>>> AddApplication([FromBody] AppWithTasks app)
     {
-      _context.Add(app);
+      var tasks = await _context.Tasks.ToListAsync();
+      foreach (var newTask in app.Tasks) 
+      {
+        tasks.ForEach(task => 
+        {
+          if (task.Id == newTask.Id)
+          {
+            task.Application = app.Name;
+            task.ApplicationId = app.Id;
+          }
+        });
+      }
+
+      var newApp = new Application()
+      {
+        Name = app.Name,
+        Tasks = app.Tasks.Length,
+        Id = app.Id,
+        Date = app.Date,
+        Edition = app.Edition,
+        Server = app.Server,
+        ServerId = app.ServerId,
+      };
+
+      _context.Add(newApp);
       await _context.SaveChangesAsync();
 
       return Ok(await _context.Apps.ToListAsync());
     }
 
     [HttpPut]
-    public async Task<ActionResult<List<Application>>> UpdateApplication(Application updatedApp)
+    public async Task<ActionResult<List<Application>>> UpdateApplication(AppWithTasks updatedApp)
     {
       var dbApp = await _context.Apps.FindAsync(updatedApp.Id);
       if (dbApp == null)
-        return NotFound("Hero not found.");
+        return NotFound("Application not found.");
+
+      var tasks = await _context.Tasks.ToListAsync();
+      tasks.ForEach(task =>
+      {
+        if (task.ApplicationId == updatedApp.Id)
+        {
+          task.Application = "";
+          task.ApplicationId = "";
+        }
+      });
+
+      foreach (var newTask in updatedApp.Tasks)
+      {
+        tasks.ForEach(task =>
+        {
+          if (task.Id == newTask.Id)
+          {
+            task.Application = updatedApp.Name;
+            task.ApplicationId = updatedApp.Id;
+          }
+        });
+      }
 
       dbApp.Name = updatedApp.Name;
       dbApp.Date = updatedApp.Date;
       dbApp.Edition = updatedApp.Edition;
       dbApp.Server = updatedApp.Server;
       dbApp.ServerId = updatedApp.ServerId;
-      dbApp.Tasks = updatedApp.Tasks;
+      dbApp.Tasks = updatedApp.Tasks.Length;
 
       await _context.SaveChangesAsync();
 
@@ -69,7 +115,17 @@ namespace DotNetApi.Controllers
     {
       var dbApp = await _context.Apps.FindAsync(id);
       if (dbApp == null)
-        return NotFound("Hero not found.");
+        return NotFound("Application not found.");
+
+      var tasks = await _context.Tasks.ToListAsync();
+      tasks.ForEach(task =>
+      {
+        if(task.ApplicationId == id)
+        {
+          task.Application = "";
+          task.ApplicationId = "";
+        }
+      });
 
       _context.Apps.Remove(dbApp);
       await _context.SaveChangesAsync();

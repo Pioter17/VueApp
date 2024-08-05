@@ -5,12 +5,16 @@
     :items="filteredData"
     :no-data-text="$t('noData')"
     :footer-props="footerProps"
+    :options.sync="options"
+    :server-items-length="totalItems"
+    :loading="loading"
+    @update:options="fetchData"
   >
     <template v-slot:top>
       <v-toolbar flat class="mb-10">
         <v-col cols="10" sm="3" class="pa-4 pl-0">
           <v-text-field
-            v-model="searchServer"
+            v-model="searchParams.searchServer"
             append-icon="mdi-magnify"
             :label="$t('search') + ' ' + $t('itemType.server')"
             hide-details
@@ -20,7 +24,7 @@
         <v-col cols="10" sm="3" class="pa-4">
           <v-text-field
             v-if="itemType != 'server'"
-            v-model="searchApplication"
+            v-model="searchParams.searchApplication"
             append-icon="mdi-magnify"
             :label="$t('search') + ' ' + $t('itemType.application')"
             hide-details
@@ -30,7 +34,7 @@
         <v-col cols="10" sm="3" class="pa-4">
           <v-text-field
             v-if="itemType == 'task'"
-            v-model="searchTask"
+            v-model="searchParams.searchTask"
             append-icon="mdi-magnify"
             :label="$t('search') + ' ' + $t('itemType.task')"
             hide-details
@@ -73,26 +77,58 @@ export default {
   $emits: ['open-delete', 'open-form'],
   data() {
     return {
-      searchServer: '',
-      searchApplication: '',
-      searchTask: '',
+      options: {
+        page: 1,
+        itemsPerPage: 10,
+      },
+      loading: false,
+      searchParams: {
+        searchServer: '',
+        searchApplication: '',
+        searchTask: '',
+      },
     };
   },
   computed: {
     filteredData() {
       return filterData(
         this.data,
-        this.searchServer,
-        this.searchApplication,
-        this.searchTask,
+        this.searchParams.searchServer,
+        this.searchParams.searchApplication,
+        this.searchParams.searchTask,
         this.itemType
       );
+    },
+    totalItems() {
+      return this.$store.getters.getTotalItems;
     },
     footerProps() {
       return getFooter(this.$i18n);
     },
   },
+  watch: {
+    searchParams: {
+      handler: 'fetchData',
+      deep: true,
+      immediate: true,
+    },
+  },
   methods: {
+    fetchData() {
+      this.loading = true;
+      this.$store
+        .dispatch('fetchTasks', {
+          pagination: [this.options.page, this.options.itemsPerPage],
+          search: [
+            this.searchParams.searchServer,
+            this.searchParams.searchApplication,
+            this.searchParams.searchTask,
+          ],
+        })
+        .finally(() => {
+          this.loading = false;
+        });
+    },
     handleRowClick(id) {
       this.$router.push(this.backLink + id);
     },

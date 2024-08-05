@@ -58,10 +58,18 @@ export default {
     },
   },
   mounted() {
-    console.log('dupa');
-    this.$store.dispatch('fetchServers');
-    this.$store.dispatch('fetchTasks');
-    this.$store.dispatch('fetchApps');
+    this.$store.dispatch('fetchServers', {
+      pagination: [1, 10],
+      search: ['', '', ''],
+    });
+    this.$store.dispatch('fetchTasks', {
+      pagination: [1, 10],
+      search: ['', '', ''],
+    });
+    this.$store.dispatch('fetchApps', {
+      pagination: [1, 10],
+      search: ['', '', ''],
+    });
   },
 };
 </script>
