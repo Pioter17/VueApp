@@ -4,14 +4,21 @@ export default {
   state() {
     return {
       tasks: [],
+      totalTaskItems: 0,
     };
   },
   getters: {
     getTasks(state) {
       return state.tasks;
     },
+    getTotalTaskItems(state) {
+      return state.totalTaskItems;
+    },
   },
   mutations: {
+    setTotalTaskItems(state, payload) {
+      state.totalTaskItems = payload.totalItems;
+    },
     setTasks(state, payload) {
       state.tasks = payload.tasks;
     },
@@ -62,35 +69,54 @@ export default {
     },
   },
   actions: {
+    async fetchAllTasks(context) {
+      try {
+        const response = await axios.get('https://localhost:7092/api/Task');
+        context.commit('setTasks', { tasks: response.data });
+        context.commit('setTotalTaskItems', {
+          totalItems: response.data.length,
+        });
+      } catch (error) {
+        console.error('Error fetching Tasks:', error);
+      }
+    },
     async fetchTasks(context, data) {
       try {
         const pagination = data.pagination;
         const search = data.search;
-        const response = await axios.get('https://localhost:7092/api/Task', {
-          params: {
-            pageNumber: pagination[0],
-            pageSize: pagination[1],
-            serverName: search[0],
-            applicationName: search[1],
-            taskName: search[2],
-          },
-        });
+        const response = await axios.get(
+          'https://localhost:7092/api/Task/paginated-tasks',
+          {
+            params: {
+              pageNumber: pagination[0],
+              pageSize: context.getters.getItemsPerPage,
+              serverName: search[0],
+              applicationName: search[1],
+              taskName: search[2],
+            },
+          }
+        );
         context.commit('setTasks', { tasks: response.data.tasks });
-        context.commit('setTotalItems', {
+        context.commit('setTotalTaskItems', {
           totalItems: response.data.totalItems,
         });
-        context.commit('setTotalPages', {
-          totalPages: response.data.totalPages,
-        });
       } catch (error) {
-        console.error('Error fetching servers:', error);
+        console.error('Error fetching Tasks:', error);
       }
     },
-    saveTask(newItem) {
+    saveTask(context, newItem) {
       axios
         .post('https://localhost:7092/api/Task', newItem)
         .then(function (response) {
           console.log(response);
+          context.dispatch('fetchTasks', {
+            pagination: [
+              context.getters.getCurrentPage,
+              context.getters.getItemsPerPage,
+            ],
+            search: ['', '', ''],
+          });
+          context.commit('setItemsPerPage', { itemsPerPage: 10 });
         })
         .catch(function (error) {
           console.log(error);
@@ -116,6 +142,14 @@ export default {
         .delete('https://localhost:7092/api/Task?id=' + taskId)
         .then(function (response) {
           console.log(response);
+          context.dispatch('fetchTasks', {
+            pagination: [
+              context.getters.getCurrentPage,
+              context.getters.getItemsPerPage,
+            ],
+            search: ['', '', ''],
+          });
+          // context.commit('setItemsPerPage', { itemsPerPage: 10 });
         })
         .catch(function (error) {
           console.log(error);

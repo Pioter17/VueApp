@@ -4,14 +4,21 @@ export default {
   state() {
     return {
       applications: [],
+      totalAppItems: 0,
     };
   },
   getters: {
     getApps(state) {
       return state.applications;
     },
+    getTotalAppItems(state) {
+      return state.totalAppItems;
+    },
   },
   mutations: {
+    setTotalAppItems(state, payload) {
+      state.totalAppItems = payload.totalItems;
+    },
     setApps(state, payload) {
       state.applications = payload.apps;
     },
@@ -47,34 +54,53 @@ export default {
     },
   },
   actions: {
+    async fetchAllApps(context) {
+      try {
+        const response = await axios.get('https://localhost:7092/api/App');
+        context.commit('setApps', { apps: response.data });
+        context.commit('setTotalAppItems', {
+          totalItems: response.data.length,
+        });
+      } catch (error) {
+        console.error('Error fetching Apps:', error);
+      }
+      ``;
+    },
     async fetchApps(context, data) {
       try {
         const pagination = data.pagination;
         const search = data.search;
-        const response = await axios.get('https://localhost:7092/api/App', {
-          params: {
-            pageNumber: pagination[0],
-            pageSize: pagination[1],
-            serverName: search[0],
-            applicationName: search[1],
-          },
-        });
+        const response = await axios.get(
+          'https://localhost:7092/api/App/paginated-apps',
+          {
+            params: {
+              pageNumber: pagination[0],
+              pageSize: pagination[1],
+              serverName: search[0],
+              applicationName: search[1],
+            },
+          }
+        );
         context.commit('setApps', { apps: response.data.applications });
-        context.commit('setTotalItems', {
+        context.commit('setTotalAppItems', {
           totalItems: response.data.totalItems,
-        });
-        context.commit('setTotalPages', {
-          totalPages: response.data.totalPages,
         });
       } catch (error) {
         console.error('Error fetching servers:', error);
       }
     },
-    saveApplication(newItem) {
+    saveApplication(context, newItem) {
       axios
         .post('https://localhost:7092/api/App', newItem)
         .then(function (response) {
           console.log(response);
+          context.dispatch('fetchApps', {
+            pagination: [
+              context.getters.getCurrentPage,
+              context.getters.getItemsPerPage,
+            ],
+            search: ['', '', ''],
+          });
         })
         .catch(function (error) {
           console.log(error);
@@ -107,6 +133,13 @@ export default {
         .delete('https://localhost:7092/api/App?id=' + appId)
         .then(function (response) {
           console.log(response);
+          context.dispatch('fetchApps', {
+            pagination: [
+              context.getters.getCurrentPage,
+              context.getters.getItemsPerPage,
+            ],
+            search: ['', '', ''],
+          });
         })
         .catch(function (error) {
           console.log(error);

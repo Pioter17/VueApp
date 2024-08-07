@@ -19,6 +19,7 @@
       :rules="[(v) => !!v || $t('forms.serverRequired')]"
     ></v-select>
     <v-select
+      clearable
       v-model="editedItem.attachedApplication"
       :items="applications"
       item-text="name"
@@ -63,6 +64,10 @@ export default {
     checkName(value) {
       return isUniqueName(value, this.tasks, this.oldName);
     },
+  },
+  created() {
+    this.$store.dispatch('fetchAllServers');
+    this.$store.dispatch('fetchAllApps');
   },
 };
 </script>

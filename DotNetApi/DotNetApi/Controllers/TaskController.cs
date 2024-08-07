@@ -17,8 +17,8 @@ namespace DotNetApi.Controllers
       _context = context;
     }
 
-    [HttpGet]
-    public async Task<ActionResult> GetAllTasks(
+    [HttpGet("paginated-tasks")]
+    public async Task<ActionResult> GetTasks(
       int pageNumber = 1,
       int pageSize = 10,
       string serverName = "",
@@ -84,6 +84,12 @@ namespace DotNetApi.Controllers
       }
     }
 
+    [HttpGet]
+    public async Task<ActionResult<List<AppTask>>> getAllTasks()
+    {
+      return Ok(await _context.Tasks.ToListAsync());
+    }
+
     [HttpPost]
     public async Task<ActionResult<List<AppTask>>> AddTask([FromBody]AppTask task)
     {
@@ -94,7 +100,7 @@ namespace DotNetApi.Controllers
       _context.Add(task);
       await _context.SaveChangesAsync();
 
-      return Ok();
+      return Ok(await _context.Tasks.CountAsync());
     }
 
     [HttpPut]

@@ -19,7 +19,7 @@
 <script>
 import { generateID } from '@pages/utils/functions/id-generator';
 import TheOverview from '@UI/components/TheOverview.vue';
-import { getServersHeaders } from '@/core/constants/headers';
+import { getServersHeaders } from '@core/constants/headers';
 
 export default {
   components: { TheOverview },
@@ -50,7 +50,6 @@ export default {
       const data = this.$store.getters.getServers;
       const newData = [];
       data.forEach((element) => {
-        // console.log({ ...element });
         element = {
           ...element,
           count: i,
@@ -58,7 +57,6 @@ export default {
         newData.push(element);
         i++;
       });
-      // console.log(...newData);
       return newData;
     },
     applications() {

@@ -83,17 +83,21 @@ export default {
       const application = this.$store.getters.getApps.find(
         (app) => app.id == this.$route.params.id
       );
-      return {
-        id: application.id,
-        name: application.name,
-        date: application.date,
-        edition_date: application.edition_date,
-        server: this.$store.getters.getServers.find(
-          (server) => server.id == application.serverId
-        ).name,
-        serverId: application.serverId,
-        tasks: this.getTasksList(application.id),
-      };
+      if (application) {
+        return {
+          id: application.id,
+          name: application.name,
+          date: application.date,
+          edition_date: application.edition_date,
+          server: this.$store.getters.getServers.find(
+            (server) => server.id == application.serverId
+          )?.name,
+          serverId: application.serverId,
+          tasks: this.getTasksList(application.id),
+        };
+      } else {
+        return {};
+      }
     },
   },
   watch: {
@@ -117,7 +121,7 @@ export default {
             ...task,
             server: this.$store.getters.getServers.find(
               (server) => server.id == task.serverId
-            ).name,
+            )?.name,
           };
         });
     },

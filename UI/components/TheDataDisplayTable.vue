@@ -6,7 +6,13 @@
     :no-data-text="$t('noData')"
     :footer-props="footerProps"
     :options.sync="options"
-    :server-items-length="totalItems"
+    :server-items-length="
+      itemType == 'server'
+        ? totalServers
+        : itemType == 'application'
+        ? totalApps
+        : totalTasks
+    "
     :loading="loading"
     @update:options="fetchData"
   >
@@ -51,7 +57,7 @@
       <tr @click="handleRowClick(item.id)" class="clickable__row">
         <td>{{ item.name }}</td>
         <td>{{ item.date }}</td>
-        <td>{{ item.edition_date }}</td>
+        <td>{{ item.edition }}</td>
         <td>{{ secondLastColumn(item) }}</td>
         <td>
           {{ lastColumn(item) }}
@@ -73,7 +79,14 @@ import { getFooter } from '@core/constants/footer';
 
 export default {
   inject: ['itemType', 'backLink', 'fetchFunction'],
-  props: ['openDialog', 'data', 'lastColumn', 'secondLastColumn', 'headers'],
+  props: [
+    'openDialog',
+    'data',
+    'lastColumn',
+    'secondLastColumn',
+    'headers',
+    'searchParams',
+  ],
   $emits: ['open-delete', 'open-form'],
   data() {
     return {
@@ -82,11 +95,6 @@ export default {
         itemsPerPage: 10,
       },
       loading: false,
-      searchParams: {
-        searchServer: '',
-        searchApplication: '',
-        searchTask: '',
-      },
     };
   },
   computed: {
@@ -99,8 +107,14 @@ export default {
         this.itemType
       );
     },
-    totalItems() {
-      return this.$store.getters.getTotalItems;
+    totalTasks() {
+      return this.$store.getters.getTotalTaskItems;
+    },
+    totalApps() {
+      return this.$store.getters.getTotalAppItems;
+    },
+    totalServers() {
+      return this.$store.getters.getTotalServerItems;
     },
     footerProps() {
       return getFooter(this.$i18n);
@@ -110,12 +124,16 @@ export default {
     searchParams: {
       handler: 'fetchData',
       deep: true,
-      // immediate: true,
+    },
+    '$store.getters.getItemsPerPage'(newItemsPerPage) {
+      this.options.itemsPerPage = newItemsPerPage;
     },
   },
   methods: {
     fetchData() {
       this.loading = true;
+      this.$store.dispatch('setItemsPerPage', this.options.itemsPerPage);
+      this.$store.dispatch('setCurrentPage', this.options.page);
       this.$store
         .dispatch(this.fetchFunction, {
           pagination: [this.options.page, this.options.itemsPerPage],

@@ -51,12 +51,11 @@ export default {
   computed: {
     items() {
       return this.$store.getters.getTasks.map((task) => {
-        // console.log('task ', { ...task });
-        const dupa = this.$store.getters.getServers;
-        // console.log({ ...dupa[0] });
         return {
           ...task,
-          server: dupa.filter((server) => server.id == task.serverId)[0].name,
+          server: this.$store.getters.getServers.find(
+            (server) => server.id == task.serverId
+          )?.name,
         };
       });
     },
@@ -110,11 +109,11 @@ export default {
           server: this.editedItem.attachedServer.name,
           application: this.editedItem.attachedApplication
             ? this.editedItem.attachedApplication.name
-            : null,
+            : '',
           serverId: this.editedItem.attachedServer.id,
           applicationId: this.editedItem.attachedApplication
             ? this.editedItem.attachedApplication.id
-            : null,
+            : '',
         };
         this.$store.dispatch('updateTask', {
           newItem: taskToUpdate,
@@ -129,26 +128,19 @@ export default {
           server: this.editedItem.attachedServer.name,
           application: this.editedItem.attachedApplication
             ? this.editedItem.attachedApplication.name
-            : null,
+            : '',
           serverId: this.editedItem.attachedServer.id,
           applicationId: this.editedItem.attachedApplication
             ? this.editedItem.attachedApplication.id
-            : null,
+            : '',
         };
         this.$store.dispatch('saveTask', newTask);
       }
-    },
-    fetch() {
-      this.$store.dispatch('fetchTasks', {
-        pagination: [1, 10],
-        search: ['', '', ''],
-      });
     },
   },
   beforeRouteEnter(_, from, next) {
     next((vm) => {
       vm.setTVar();
-      // vm.fetch();
     });
   },
 };

@@ -54,14 +54,12 @@ export default {
       let i = 0;
       const data = this.$store.getters.getApps;
       const newData = [];
-      console.log({ ...data });
       data.forEach((element) => {
-        // console.log({ ...element });
         element = {
           ...element,
           server: this.$store.getters.getServers.find(
             (server) => server.id == element.serverId
-          ).name,
+          )?.name,
           count: i,
         };
         newData.push(element);
@@ -147,17 +145,10 @@ export default {
       }
       this.close();
     },
-    fetch() {
-      this.$store.dispatch('fetchApps', {
-        pagination: [1, 10],
-        search: ['', '', ''],
-      });
-    },
   },
   beforeRouteEnter(_, from, next) {
     next((vm) => {
       vm.setTVar();
-      // vm.fetch();
     });
   },
 };

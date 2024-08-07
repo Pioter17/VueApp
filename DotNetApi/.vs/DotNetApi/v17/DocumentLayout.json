@@ -3,12 +3,12 @@
   "WorkspaceRootPath": "C:\\Users\\piotr\\Projekt2\\FirstVueProject\\DotNetApi\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{C13760A7-14BC-4815-AA76-414D6CC9490C}|DotNetApi\\DotNetApi.csproj|c:\\users\\piotr\\projekt2\\firstvueproject\\dotnetapi\\dotnetapi\\controllers\\servercontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{C13760A7-14BC-4815-AA76-414D6CC9490C}|DotNetApi\\DotNetApi.csproj|solutionrelative:dotnetapi\\controllers\\servercontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
       "AbsoluteMoniker": "D:0:0:{C13760A7-14BC-4815-AA76-414D6CC9490C}|DotNetApi\\DotNetApi.csproj|c:\\users\\piotr\\projekt2\\firstvueproject\\dotnetapi\\dotnetapi\\controllers\\appcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{C13760A7-14BC-4815-AA76-414D6CC9490C}|DotNetApi\\DotNetApi.csproj|solutionrelative:dotnetapi\\controllers\\appcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{C13760A7-14BC-4815-AA76-414D6CC9490C}|DotNetApi\\DotNetApi.csproj|c:\\users\\piotr\\projekt2\\firstvueproject\\dotnetapi\\dotnetapi\\controllers\\servercontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{C13760A7-14BC-4815-AA76-414D6CC9490C}|DotNetApi\\DotNetApi.csproj|solutionrelative:dotnetapi\\controllers\\servercontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{C13760A7-14BC-4815-AA76-414D6CC9490C}|DotNetApi\\DotNetApi.csproj|c:\\users\\piotr\\projekt2\\firstvueproject\\dotnetapi\\dotnetapi\\controllers\\taskcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
@@ -26,17 +26,29 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 2,
+          "SelectedChildIndex": 1,
           "Children": [
             {
               "$type": "Document",
               "DocumentIndex": 1,
+              "Title": "ServerController.cs",
+              "DocumentMoniker": "C:\\Users\\piotr\\Projekt2\\FirstVueProject\\DotNetApi\\DotNetApi\\Controllers\\ServerController.cs",
+              "RelativeDocumentMoniker": "DotNetApi\\Controllers\\ServerController.cs",
+              "ToolTip": "C:\\Users\\piotr\\Projekt2\\FirstVueProject\\DotNetApi\\DotNetApi\\Controllers\\ServerController.cs",
+              "RelativeToolTip": "DotNetApi\\Controllers\\ServerController.cs",
+              "ViewState": "AQIAAD8AAAAAAAAAAAAYwEoAAAAxAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-07-31T09:53:22.7Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
               "Title": "AppController.cs",
               "DocumentMoniker": "C:\\Users\\piotr\\Projekt2\\FirstVueProject\\DotNetApi\\DotNetApi\\Controllers\\AppController.cs",
               "RelativeDocumentMoniker": "DotNetApi\\Controllers\\AppController.cs",
               "ToolTip": "C:\\Users\\piotr\\Projekt2\\FirstVueProject\\DotNetApi\\DotNetApi\\Controllers\\AppController.cs",
               "RelativeToolTip": "DotNetApi\\Controllers\\AppController.cs",
-              "ViewState": "AQIAAC8AAAAAAAAAAAAAAFMAAAAFAAAA",
+              "ViewState": "AQIAAFAAAAAAAAAAAAAAAFUAAAAEAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2024-07-31T09:53:29.509Z",
               "EditorCaption": ""
@@ -49,22 +61,9 @@
               "RelativeDocumentMoniker": "DotNetApi\\Controllers\\TaskController.cs",
               "ToolTip": "C:\\Users\\piotr\\Projekt2\\FirstVueProject\\DotNetApi\\DotNetApi\\Controllers\\TaskController.cs",
               "RelativeToolTip": "DotNetApi\\Controllers\\TaskController.cs",
-              "ViewState": "AQIAAEAAAAAAAAAAAAAAAFQAAAAFAAAA",
+              "ViewState": "AQIAAFUAAAAAAAAAAAAAwGYAAAAWAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2024-07-31T09:50:34.74Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 0,
-              "Title": "ServerController.cs",
-              "DocumentMoniker": "C:\\Users\\piotr\\Projekt2\\FirstVueProject\\DotNetApi\\DotNetApi\\Controllers\\ServerController.cs",
-              "RelativeDocumentMoniker": "DotNetApi\\Controllers\\ServerController.cs",
-              "ToolTip": "C:\\Users\\piotr\\Projekt2\\FirstVueProject\\DotNetApi\\DotNetApi\\Controllers\\ServerController.cs",
-              "RelativeToolTip": "DotNetApi\\Controllers\\ServerController.cs",
-              "ViewState": "AQIAAAcAAAAAAAAAAAAAABgAAAAFAAAA",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-07-31T09:53:22.7Z",
-              "EditorCaption": ""
             },
             {
               "$type": "Document",

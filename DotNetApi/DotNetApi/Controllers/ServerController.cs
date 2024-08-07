@@ -17,7 +17,7 @@ namespace DotNetApi.Controllers
       _context = context;
     }
 
-    [HttpGet]
+    [HttpGet("paginated-servers")]
     public async Task<ActionResult> GetAllServers(
     int pageNumber = 1,
     int pageSize = 10,
@@ -71,17 +71,10 @@ namespace DotNetApi.Controllers
       }
     }
 
-
     [HttpGet]
-    [Route("{id}")]
-    public async Task<ActionResult<AppServer>> GetServerById(string id)
+    public async Task<ActionResult<List<AppServer>>> getAllServers()
     {
-      var server = await _context.Servers.FindAsync(id);
-      if (server == null)
-      {
-        return NotFound("Server not found");
-      }
-      return Ok(server);
+      return Ok(await _context.Servers.ToListAsync());
     }
 
     [HttpPost]
@@ -90,7 +83,7 @@ namespace DotNetApi.Controllers
       _context.Add(server);
       await _context.SaveChangesAsync();
 
-      return Ok(await _context.Servers.ToListAsync());
+      return Ok(await _context.Servers.CountAsync());
     }
 
     [HttpPut]

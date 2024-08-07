@@ -4,14 +4,21 @@ export default {
   state() {
     return {
       servers: [],
+      totalServerItems: 0,
     };
   },
   getters: {
     getServers(state) {
       return state.servers;
     },
+    getTotalServerItems(state) {
+      return state.totalServerItems;
+    },
   },
   mutations: {
+    setTotalServerItems(state, payload) {
+      state.totalServerItems = payload.totalItems;
+    },
     setServers(state, payload) {
       state.servers = payload.servers;
     },
@@ -28,33 +35,51 @@ export default {
     },
   },
   actions: {
-    async fetchServers(context, data) {
+    async fetchAllServers(context) {
       try {
-        const pagination = data.pagination;
-        const search = data.search;
-        const response = await axios.get('https://localhost:7092/api/Server', {
-          params: {
-            pageNumber: pagination[0],
-            pageSize: pagination[1],
-            serverName: search[0],
-          },
-        });
-        context.commit('setServers', { servers: response.data.servers });
-        context.commit('setTotalItems', {
-          totalItems: response.data.totalItems,
-        });
-        context.commit('setTotalPages', {
-          totalPages: response.data.totalPages,
+        const response = await axios.get('https://localhost:7092/api/Server');
+        context.commit('setServers', { servers: response.data });
+        context.commit('setTotalServerItems', {
+          totalItems: response.data.length,
         });
       } catch (error) {
         console.error('Error fetching servers:', error);
       }
     },
-    saveServer(newItem) {
+    async fetchServers(context, data) {
+      try {
+        const pagination = data.pagination;
+        const search = data.search;
+        const response = await axios.get(
+          'https://localhost:7092/api/Server/paginated-servers',
+          {
+            params: {
+              pageNumber: pagination[0],
+              pageSize: pagination[1],
+              serverName: search[0],
+            },
+          }
+        );
+        context.commit('setServers', { servers: response.data.servers });
+        context.commit('setTotalServerItems', {
+          totalItems: response.data.totalItems,
+        });
+      } catch (error) {
+        console.error('Error fetching servers:', error);
+      }
+    },
+    saveServer(context, newItem) {
       axios
         .post('https://localhost:7092/api/Server', newItem)
         .then(function (response) {
           console.log(response);
+          context.dispatch('fetchServers', {
+            pagination: [
+              context.getters.getCurrentPage,
+              context.getters.getItemsPerPage,
+            ],
+            search: ['', '', ''],
+          });
         })
         .catch(function (error) {
           console.log(error);
@@ -82,6 +107,13 @@ export default {
         .delete('https://localhost:7092/api/Server?id=' + serverId)
         .then(function (response) {
           console.log(response);
+          context.dispatch('fetchServers', {
+            pagination: [
+              context.getters.getCurrentPage,
+              context.getters.getItemsPerPage,
+            ],
+            search: ['', '', ''],
+          });
         })
         .catch(function (error) {
           console.log(error);

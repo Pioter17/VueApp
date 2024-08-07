@@ -78,14 +78,18 @@ export default {
       const server = this.$store.getters.getServers.find(
         (server) => server.id == this.$route.params.id
       );
-      return {
-        id: server.id,
-        name: server.name,
-        date: server.date,
-        edition: server.edition_date,
-        applications: this.getApplicationsList(server.id),
-        tasks: this.getTasksList(server.id),
-      };
+      if (server) {
+        return {
+          id: server.id,
+          name: server.name,
+          date: server.date,
+          edition: server.edition_date,
+          applications: this.getApplicationsList(server.id),
+          tasks: this.getTasksList(server.id),
+        };
+      } else {
+        return {};
+      }
     },
   },
   watch: {

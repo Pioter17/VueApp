@@ -73,7 +73,7 @@ export default {
       );
       task.server = this.$store.getters.getServers.find(
         (server) => server.id == task.serverId
-      ).name;
+      )?.name;
       return task;
     },
     servers() {
@@ -138,11 +138,11 @@ export default {
           server: this.editedItem.attachedServer.name,
           application: this.editedItem.attachedApplication
             ? this.editedItem.attachedApplication.name
-            : null,
+            : '',
           serverId: this.editedItem.attachedServer.id,
           applicationId: this.editedItem.attachedApplication
             ? this.editedItem.attachedApplication.id
-            : null,
+            : '',
         };
         this.$store.dispatch('updateTask', {
           newItem: taskToUpdate,

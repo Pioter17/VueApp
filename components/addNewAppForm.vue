@@ -71,5 +71,9 @@ export default {
       return isUniqueName(value, this.apps, this.oldName);
     },
   },
+  created() {
+    this.$store.dispatch('fetchAllServers');
+    this.$store.dispatch('fetchAllTasks');
+  },
 };
 </script>

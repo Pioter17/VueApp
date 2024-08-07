@@ -49,6 +49,7 @@
           :lastColumn="lastColumn"
           :secondLastColumn="secondLastColumn"
           :headers="headers"
+          :searchParams="searchParams"
         >
         </the-data-display-table>
       </v-sheet>
@@ -95,6 +96,11 @@ export default {
       dialog: false,
       dialogDelete: false,
       editedIndex: -1,
+      searchParams: {
+        searchServer: '',
+        searchApplication: '',
+        searchTask: '',
+      },
     };
   },
   computed: {
@@ -113,6 +119,11 @@ export default {
     },
     deleteItemConfirm() {
       this.$store.dispatch(this.deleteActionName, this.editedIndex);
+      this.searchParams = {
+        searchServer: '',
+        searchApplication: '',
+        searchTask: '',
+      };
       this.closeDelete();
     },
     close() {
@@ -133,6 +144,11 @@ export default {
     checkAndSave() {
       const isValid = this.$refs.formComponent.validateForm();
       if (isValid) {
+        this.searchParams = {
+          searchServer: '',
+          searchApplication: '',
+          searchTask: '',
+        };
         this.save();
         this.close();
       }

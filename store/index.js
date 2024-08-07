@@ -17,35 +17,41 @@ export default () =>
     state() {
       return {
         locale: 'en',
-        totalItems: 0,
-        totalPages: 0,
+        itemsPerPage: 10,
+        currentPage: 1,
       };
     },
     getters: {
       getLocale(state) {
         return state.locale;
       },
-      getTotalPages(state) {
-        return state.totalPages;
+      getItemsPerPage(state) {
+        return state.itemsPerPage;
       },
-      getTotalItems(state) {
-        return state.totalItems;
+      getCurrentPage(state) {
+        return state.currentPage;
       },
     },
     mutations: {
-      setTotalItems(state, payload) {
-        state.totalItems = payload.totalItems;
-      },
-      setTotalPages(state, payload) {
-        state.totalPages = payload.totalPages;
-      },
       setLocale(state, payload) {
         state.locale = payload.newLocale;
+      },
+      setItemsPerPage(state, payload) {
+        state.itemsPerPage = payload.itemsPerPage;
+      },
+      setCurrentPage(state, payload) {
+        state.currentPage = payload.currentPage;
       },
     },
     actions: {
       changeLang(context, newLang) {
         context.commit('setLocale', { newLocale: newLang });
+      },
+      setItemsPerPage(context, newValue) {
+        context.commit('setItemsPerPage', { itemsPerPage: newValue });
+      },
+      setCurrentPage(context, newValue) {
+        context.commit('setCurrentPage', { currentPage: newValue });
       },
     },
   });

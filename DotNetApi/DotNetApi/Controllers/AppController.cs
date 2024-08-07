@@ -17,14 +17,13 @@ namespace DotNetApi.Controllers
       _context = context;
     }
 
-    [HttpGet]
+    [HttpGet("paginated-apps")]
     public async Task<ActionResult> GetAllApps(
     int pageNumber = 1,
     int pageSize = 10,
     string serverName = "",
     string applicationName = "")
     {
-      // Filtruj aplikacje na podstawie przekazanych kryteriów
       var appsQuery = _context.Apps.AsQueryable();
 
       if (!string.IsNullOrWhiteSpace(serverName))
@@ -79,15 +78,9 @@ namespace DotNetApi.Controllers
     }
 
     [HttpGet]
-    [Route("{id}")]
-    public async Task<ActionResult<Application>> GetAppById(string id)
+    public async Task<ActionResult<List<Application>>> getAllApps()
     {
-      var app = await _context.Apps.FindAsync(id);
-      if (app == null)
-      {
-        return NotFound("Application not found");
-      }
-      return Ok(app);
+      return Ok(await _context.Apps.ToListAsync());
     }
 
     [HttpPost]
@@ -120,7 +113,7 @@ namespace DotNetApi.Controllers
       _context.Add(newApp);
       await _context.SaveChangesAsync();
 
-      return Ok(await _context.Apps.ToListAsync());
+      return Ok(await _context.Apps.CountAsync());
     }
 
     [HttpPut]
