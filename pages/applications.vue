@@ -13,6 +13,8 @@
     :warning="warningMessage"
     :isNew="isNew"
     :headers="headers"
+    :snackbar="snackbar"
+    :snackMessage="snackbarMessage"
   ></the-overview>
 </template>
 
@@ -39,6 +41,8 @@ export default {
         attachedServer: null,
         attachedTasks: [],
       },
+      snackbar: false,
+      snackbarMessage: '',
     };
   },
   provide() {
@@ -116,7 +120,7 @@ export default {
         this.editedIndex = -1;
       });
     },
-    save() {
+    async save() {
       if (this.editedIndex != -1) {
         const appToUpdate = {
           id: this.apps[this.editedIndex].id,
@@ -141,14 +145,24 @@ export default {
           serverId: this.editedItem.attachedServer.id,
           tasks: this.editedItem.attachedTasks,
         };
-        this.$store.dispatch('saveApplication', newApp);
+        try {
+          await this.$store.dispatch('saveApplication', newApp);
+        } catch (error) {
+          this.snackbar = true;
+          this.snackbarMessage = error.message;
+        }
       }
       this.close();
+    },
+    fetchData() {
+      this.$store.dispatch('fetchAllTasks');
+      this.$store.dispatch('fetchAllServers');
     },
   },
   beforeRouteEnter(_, from, next) {
     next((vm) => {
       vm.setTVar();
+      vm.fetchData();
     });
   },
 };

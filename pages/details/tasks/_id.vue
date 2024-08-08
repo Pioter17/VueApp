@@ -1,5 +1,8 @@
 <template>
   <div class="wrapper">
+    <v-snackbar v-model="snackbar" :timeout="3000" color="error">
+      {{ snackbarMessage }}
+    </v-snackbar>
     <the-form-dialog
       @cancel-close="close"
       @save-new-item="save"
@@ -64,6 +67,8 @@ export default {
         attachedServer: null,
         attachedApplication: null,
       },
+      snackbar: false,
+      snackbarMessage: '',
     };
   },
   computed: {
@@ -127,7 +132,7 @@ export default {
         };
       }
     },
-    save() {
+    async save() {
       const isValid = this.$refs.formComponent.validateForm();
       if (isValid) {
         const taskToUpdate = {
@@ -144,10 +149,15 @@ export default {
             ? this.editedItem.attachedApplication.id
             : '',
         };
-        this.$store.dispatch('updateTask', {
-          newItem: taskToUpdate,
-          index: this.$store.getters.getTasks.indexOf(this.taskDetails),
-        });
+        try {
+          await this.$store.dispatch('updateTask', {
+            newItem: taskToUpdate,
+            index: this.$store.getters.getTasks.indexOf(this.taskDetails),
+          });
+        } catch (error) {
+          this.snackbar = true;
+          this.snackbarMessage = error.message;
+        }
         this.close();
       }
     },

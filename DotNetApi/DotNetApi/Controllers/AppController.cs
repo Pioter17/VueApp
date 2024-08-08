@@ -18,14 +18,18 @@ namespace DotNetApi.Controllers
     }
 
     [HttpGet("paginated-apps")]
-    public async Task<ActionResult> GetAllApps(
+    public async Task<ActionResult> GetApps(
     int pageNumber = 1,
     int pageSize = 10,
     string serverName = "",
-    string applicationName = "")
+    string applicationName = "",
+    string sortBy = "Name", // Domyślne sortowanie
+    bool sortDesc = false // Domyślnie rosnąco
+)
     {
       var appsQuery = _context.Apps.AsQueryable();
 
+      // Filtrowanie
       if (!string.IsNullOrWhiteSpace(serverName))
       {
         appsQuery = appsQuery.Where(a => a.Server.ToLower().Contains(serverName.ToLower()));
@@ -35,6 +39,14 @@ namespace DotNetApi.Controllers
       {
         appsQuery = appsQuery.Where(a => a.Name.ToLower().Contains(applicationName.ToLower()));
       }
+
+      // Sortowanie
+      appsQuery = sortBy switch
+      {
+        "name" => sortDesc ? appsQuery.OrderByDescending(a => a.Name) : appsQuery.OrderBy(a => a.Name),
+        "date" => sortDesc ? appsQuery.OrderByDescending(a => a.Date) : appsQuery.OrderBy(a => a.Date),
+        _ => sortDesc ? appsQuery.OrderByDescending(a => a.Name) : appsQuery.OrderBy(a => a.Name), // Domyślne sortowanie
+      };
 
       if (pageSize == -1)
       {
@@ -77,6 +89,7 @@ namespace DotNetApi.Controllers
       }
     }
 
+
     [HttpGet]
     public async Task<ActionResult<List<Application>>> getAllApps()
     {
@@ -86,6 +99,12 @@ namespace DotNetApi.Controllers
     [HttpPost]
     public async Task<ActionResult<List<Application>>> AddApplication([FromBody] AppWithTasks app)
     {
+      var existingApp = await _context.Apps.FirstOrDefaultAsync(a => a.Name == app.Name);
+      if (existingApp != null)
+      {
+        return Conflict(new { message = "Application with the same name already exists." });
+      }
+
       var tasks = await _context.Tasks.ToListAsync();
       foreach (var newTask in app.Tasks) 
       {
@@ -122,6 +141,12 @@ namespace DotNetApi.Controllers
       var dbApp = await _context.Apps.FindAsync(updatedApp.Id);
       if (dbApp == null)
         return NotFound("Application not found.");
+
+      var existingApp = await _context.Apps.FirstOrDefaultAsync(a => a.Name == updatedApp.Name);
+      if (existingApp != null)
+      {
+        return Conflict(new { message = "Application with the same name already exists." });
+      }
 
       var tasks = await _context.Tasks.ToListAsync();
       tasks.ForEach(task =>

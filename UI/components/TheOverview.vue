@@ -1,5 +1,8 @@
 <template>
   <v-row>
+    <v-snackbar v-model="compSnackbar" :timeout="3000" color="error">
+      {{ compSnackMessage }}
+    </v-snackbar>
     <the-form-dialog
       @cancel-close="close"
       @save-new-item="checkAndSave"
@@ -89,6 +92,8 @@ export default {
     'warning',
     'isNew',
     'headers',
+    'snackbar',
+    'snackMessage',
   ],
   emits: ['edit-item', 'save-data', 'close-dialog'],
   data() {
@@ -106,6 +111,17 @@ export default {
   computed: {
     editedItem() {
       return this.itemToEdit;
+    },
+    compSnackbar: {
+      get() {
+        return this.snackbar;
+      },
+      set(value) {
+        this.snackbar = value;
+      },
+    },
+    compSnackMessage() {
+      return this.snackMessage;
     },
   },
   methods: {

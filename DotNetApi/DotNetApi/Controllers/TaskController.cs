@@ -3,6 +3,7 @@ using DotNetApi.Entities;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System.Threading.Tasks;
 
 namespace DotNetApi.Controllers
 {
@@ -19,12 +20,14 @@ namespace DotNetApi.Controllers
 
     [HttpGet("paginated-tasks")]
     public async Task<ActionResult> GetTasks(
-      int pageNumber = 1,
-      int pageSize = 10,
-      string serverName = "",
-      string applicationName = "",
-      string taskName = ""
-    )
+  int pageNumber = 1,
+  int pageSize = 10,
+  string serverName = "",
+  string applicationName = "",
+  string taskName = "",
+  string sortBy = "Name", // Domyślne sortowanie
+  bool sortDesc = false // Domyślnie rosnąco
+)
     {
       var tasksQuery = _context.Tasks.AsQueryable();
 
@@ -42,6 +45,14 @@ namespace DotNetApi.Controllers
       {
         tasksQuery = tasksQuery.Where(t => t.Name.ToLower().Contains(taskName.ToLower()));
       }
+
+      tasksQuery = sortBy switch
+      {
+        "name" => sortDesc ? tasksQuery.OrderByDescending(t => t.Name) : tasksQuery.OrderBy(t => t.Name),
+        "date" => sortDesc ? tasksQuery.OrderByDescending(t => t.Date) : tasksQuery.OrderBy(t => t.Date),
+        "edition" => sortDesc ? tasksQuery.OrderByDescending(t => t.Edition) : tasksQuery.OrderBy(t => t.Edition),
+        _ => sortDesc ? tasksQuery.OrderByDescending(t => t.Name) : tasksQuery.OrderBy(t => t.Name), // Domyślne sortowanie
+      };
 
       if (pageSize == -1)
       {
@@ -84,6 +95,7 @@ namespace DotNetApi.Controllers
       }
     }
 
+
     [HttpGet]
     public async Task<ActionResult<List<AppTask>>> getAllTasks()
     {
@@ -97,6 +109,13 @@ namespace DotNetApi.Controllers
       {
         return BadRequest();
       }
+
+      var existingTask = await _context.Tasks.FirstOrDefaultAsync(t => t.Name == task.Name);
+      if (existingTask != null)
+      {
+        return Conflict(new { message = "Task with the same name already exists." });
+      }
+
       _context.Add(task);
       await _context.SaveChangesAsync();
 
@@ -109,6 +128,12 @@ namespace DotNetApi.Controllers
       var dbTask = await _context.Tasks.FindAsync(updatedTask.Id);
       if (dbTask == null)
         return NotFound("Task not found.");
+
+      var existingTask = await _context.Tasks.FirstOrDefaultAsync(t => t.Name == updatedTask.Name);
+      if (existingTask != null)
+      {
+        return Conflict(new { message = "Task with the same name already exists." });
+      }
 
       dbTask.Name = updatedTask.Name;
       dbTask.Date = updatedTask.Date;

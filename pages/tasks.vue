@@ -12,6 +12,8 @@
     :secondLastColumn="secondLastColumn"
     :isNew="isNew"
     :headers="headers"
+    :snackbar="snackbar"
+    :snackMessage="snackbarMessage"
   >
   </the-overview>
 </template>
@@ -38,6 +40,8 @@ export default {
         attachedServer: null,
         attachedApplication: null,
       },
+      snackbar: false,
+      snackbarMessage: '',
     };
   },
   provide() {
@@ -99,7 +103,7 @@ export default {
         this.editedIndex = -1;
       });
     },
-    save() {
+    async save() {
       if (this.editedIndex != -1) {
         const taskToUpdate = {
           id: this.items[this.editedIndex].id,
@@ -134,13 +138,23 @@ export default {
             ? this.editedItem.attachedApplication.id
             : '',
         };
-        this.$store.dispatch('saveTask', newTask);
+        try {
+          await this.$store.dispatch('saveTask', newTask);
+        } catch (error) {
+          this.snackbar = true;
+          this.snackbarMessage = error.message;
+        }
       }
+    },
+    fetchData() {
+      this.$store.dispatch('fetchAllServers');
+      this.$store.dispatch('fetchAllApps');
     },
   },
   beforeRouteEnter(_, from, next) {
     next((vm) => {
       vm.setTVar();
+      vm.fetchData();
     });
   },
 };

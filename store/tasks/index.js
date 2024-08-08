@@ -93,6 +93,8 @@ export default {
               serverName: search[0],
               applicationName: search[1],
               taskName: search[2],
+              sortBy: data.sortBy,
+              sortDesc: data.sortDesc,
             },
           }
         );
@@ -104,37 +106,49 @@ export default {
         console.error('Error fetching Tasks:', error);
       }
     },
-    saveTask(context, newItem) {
-      axios
-        .post('https://localhost:7092/api/Task', newItem)
-        .then(function (response) {
-          console.log(response);
-          context.dispatch('fetchTasks', {
-            pagination: [
-              context.getters.getCurrentPage,
-              context.getters.getItemsPerPage,
-            ],
-            search: ['', '', ''],
+    async saveTask(context, newItem) {
+      try {
+        await axios
+          .post('https://localhost:7092/api/Task', newItem)
+          .then(function (response) {
+            console.log(response);
+            context.dispatch('fetchTasks', {
+              pagination: [
+                context.getters.getCurrentPage,
+                context.getters.getItemsPerPage,
+              ],
+              search: ['', '', ''],
+              sortBy: [],
+              sortDesc: [],
+            });
+            context.commit('setItemsPerPage', { itemsPerPage: 10 });
           });
-          context.commit('setItemsPerPage', { itemsPerPage: 10 });
-        })
-        .catch(function (error) {
-          console.log(error);
-        });
+      } catch (error) {
+        if (error.response.status == 409) {
+          throw new Error(error.response.data.message);
+        } else {
+          throw new Error('An unexpected error occurred');
+        }
+      }
     },
-    updateTask(context, payload) {
-      context.commit('putTask', {
-        newItem: payload.newItem,
-        index: payload.index,
-      });
-      axios
-        .put('https://localhost:7092/api/Task', payload.newItem)
-        .then(function (response) {
-          console.log(response);
-        })
-        .catch(function (error) {
-          console.log(error);
-        });
+    async updateTask(context, payload) {
+      try {
+        await axios
+          .put('https://localhost:7092/api/Task', payload.newItem)
+          .then(function (response) {
+            console.log(response);
+            context.commit('putTask', {
+              newItem: payload.newItem,
+              index: payload.index,
+            });
+          });
+      } catch (error) {
+        if (error.response.status == 409) {
+          throw new Error(error.response.data.message);
+        } else {
+          throw new Error('An unexpected error occurred');
+        }
+      }
     },
     deleteTask(context, taskId) {
       context.commit('removeTask', { taskId: taskId });
@@ -148,8 +162,9 @@ export default {
               context.getters.getItemsPerPage,
             ],
             search: ['', '', ''],
+            sortBy: [],
+            sortDesc: [],
           });
-          // context.commit('setItemsPerPage', { itemsPerPage: 10 });
         })
         .catch(function (error) {
           console.log(error);

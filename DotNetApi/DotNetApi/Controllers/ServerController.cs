@@ -1,8 +1,10 @@
 using DotNetApi.Data;
 using DotNetApi.Entities;
+using Microsoft.AspNetCore.Hosting.Server;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System.Threading.Tasks;
 
 namespace DotNetApi.Controllers
 {
@@ -21,14 +23,26 @@ namespace DotNetApi.Controllers
     public async Task<ActionResult> GetAllServers(
     int pageNumber = 1,
     int pageSize = 10,
-    string serverName = "")
+    string serverName = "",
+    string sortBy = "Name", // Domyślne sortowanie
+    bool sortDesc = false // Domyślnie rosnąco
+)
     {
       var serversQuery = _context.Servers.AsQueryable();
 
+      // Filtrowanie
       if (!string.IsNullOrWhiteSpace(serverName))
       {
         serversQuery = serversQuery.Where(s => s.Name.ToLower().Contains(serverName.ToLower()));
       }
+
+      // Sortowanie
+      serversQuery = sortBy switch
+      {
+        "name" => sortDesc ? serversQuery.OrderByDescending(s => s.Name) : serversQuery.OrderBy(s => s.Name),
+        "date" => sortDesc ? serversQuery.OrderByDescending(s => s.Date) : serversQuery.OrderBy(s => s.Date),
+        _ => sortDesc ? serversQuery.OrderByDescending(s => s.Name) : serversQuery.OrderBy(s => s.Name), // Domyślne sortowanie
+      };
 
       if (pageSize == -1)
       {
@@ -71,6 +85,7 @@ namespace DotNetApi.Controllers
       }
     }
 
+
     [HttpGet]
     public async Task<ActionResult<List<AppServer>>> getAllServers()
     {
@@ -80,6 +95,12 @@ namespace DotNetApi.Controllers
     [HttpPost]
     public async Task<ActionResult<List<AppServer>>> AddServer([FromBody] AppServer server)
     {
+      var existingServer = await _context.Servers.FirstOrDefaultAsync(s => s.Name == server.Name);
+      if (existingServer != null)
+      {
+        return Conflict(new { message = "Server with the same name already exists." });
+      }
+
       _context.Add(server);
       await _context.SaveChangesAsync();
 
@@ -92,6 +113,12 @@ namespace DotNetApi.Controllers
       var dbServer = await _context.Servers.FindAsync(updatedServer.Id);
       if (dbServer == null)
         return NotFound("Server not found.");
+
+      var existingServer = await _context.Servers.FirstOrDefaultAsync(s => s.Name == updatedServer.Name);
+      if (existingServer != null)
+      {
+        return Conflict(new { message = "Server with the same name already exists." });
+      }
 
       dbServer.Name = updatedServer.Name;
       dbServer.Edition = updatedServer.Edition;

@@ -57,6 +57,8 @@ export default {
               pageNumber: pagination[0],
               pageSize: pagination[1],
               serverName: search[0],
+              sortBy: data.sortBy,
+              sortDesc: data.sortDesc,
             },
           }
         );
@@ -68,36 +70,49 @@ export default {
         console.error('Error fetching servers:', error);
       }
     },
-    saveServer(context, newItem) {
-      axios
-        .post('https://localhost:7092/api/Server', newItem)
-        .then(function (response) {
-          console.log(response);
-          context.dispatch('fetchServers', {
-            pagination: [
-              context.getters.getCurrentPage,
-              context.getters.getItemsPerPage,
-            ],
-            search: ['', '', ''],
+    async saveServer(context, newItem) {
+      try {
+        await axios
+          .post('https://localhost:7092/api/Server', newItem)
+          .then(function (response) {
+            console.log(response);
+            context.dispatch('fetchServers', {
+              pagination: [
+                context.getters.getCurrentPage,
+                context.getters.getItemsPerPage,
+              ],
+              search: ['', '', ''],
+              sortBy: [],
+              sortDesc: [],
+            });
           });
-        })
-        .catch(function (error) {
-          console.log(error);
-        });
+      } catch (error) {
+        if (error.response.status == 409) {
+          console.log('dupa');
+          throw new Error(error.response.data.message);
+        } else {
+          throw new Error('An unexpected error occurred');
+        }
+      }
     },
-    updateServer(context, payload) {
-      context.commit('putServer', {
-        newItem: payload.newItem,
-        index: payload.index,
-      });
-      axios
-        .put('https://localhost:7092/api/Server', payload.newItem)
-        .then(function (response) {
-          console.log(response);
-        })
-        .catch(function (error) {
-          console.log(error);
-        });
+    async updateServer(context, payload) {
+      try {
+        await axios
+          .put('https://localhost:7092/api/Server', payload.newItem)
+          .then(function (response) {
+            console.log(response);
+            context.commit('putServer', {
+              newItem: payload.newItem,
+              index: payload.index,
+            });
+          });
+      } catch (error) {
+        if (error.response.status == 409) {
+          throw new Error(error.response.data.message);
+        } else {
+          throw new Error('An unexpected error occurred');
+        }
+      }
     },
     deleteServer(context, serverId) {
       context.commit('removeAllServerTasks', { serverId: serverId });
@@ -113,6 +128,8 @@ export default {
               context.getters.getItemsPerPage,
             ],
             search: ['', '', ''],
+            sortBy: [],
+            sortDesc: [],
           });
         })
         .catch(function (error) {

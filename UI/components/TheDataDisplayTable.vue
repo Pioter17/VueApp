@@ -93,6 +93,8 @@ export default {
       options: {
         page: 1,
         itemsPerPage: 10,
+        sortBy: [],
+        sortDesc: [],
       },
       loading: false,
     };
@@ -142,6 +144,8 @@ export default {
             this.searchParams.searchApplication,
             this.searchParams.searchTask,
           ],
+          sortBy: this.options.sortBy ? this.options.sortBy[0] : '',
+          sortDesc: this.options.sortDesc ? this.options.sortDesc[0] : false,
         })
         .finally(() => {
           this.loading = false;
