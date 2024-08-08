@@ -162,7 +162,7 @@ export default {
         });
     },
     async exportAll() {
-      const itemName = this.itemType == 'application' ? 'App' : this.item;
+      const itemName = this.itemType == 'application' ? 'App' : this.itemType;
       const enpointURL =
         'https://localhost:7092/api/' +
         itemName[0].toUpperCase() +

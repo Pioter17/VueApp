@@ -19,7 +19,7 @@
           {{ $t('creationDate') }}: {{ itemDetails.date }}
         </v-card-subtitle>
         <v-card-subtitle class="text-h5">
-          {{ $t('editionDate') }}: {{ itemDetails.edition_date }}
+          {{ $t('editionDate') }}: {{ itemDetails.edition }}
         </v-card-subtitle>
         <slot> </slot>
       </div>

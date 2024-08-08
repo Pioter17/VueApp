@@ -93,7 +93,7 @@ export default {
           id: application.id,
           name: application.name,
           date: application.date,
-          edition_date: application.edition_date,
+          edition: application.edition,
           server: this.$store.getters.getServers.find(
             (server) => server.id == application.serverId
           )?.name,
@@ -151,15 +151,13 @@ export default {
     },
     updateEditedItem(newValue) {
       if (newValue != null) {
-        this.editedItem = {
-          itemName: newValue.name,
-          attachedServer: this.$store.getters.getServers.find(
-            (server) => server.id == newValue.serverId
-          ),
-          attachedTasks: this.$store.getters.getTasks.filter(
-            (task) => task.applicationId == this.appDetails.id
-          ),
-        };
+        this.editedItem.itemName = newValue.name;
+        this.editedItem.attachedServer = this.$store.getters.getServers.find(
+          (server) => server.id == newValue.serverId
+        );
+        this.editedItem.attachedTasks = this.$store.getters.getTasks.filter(
+          (task) => task.applicationId == this.appDetails.id
+        );
       } else {
         this.editedItem = {
           itemName: '',

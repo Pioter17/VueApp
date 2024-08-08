@@ -31,11 +31,9 @@ namespace DotNetApi.Migrations
 
             var filePathApp = Path.Combine("Data", "applications.json");
 
-            // Załaduj dane z JSON-a
             var jsonDataApp = File.ReadAllText(filePathApp);
             var apps = JsonConvert.DeserializeObject<List<Application>>(jsonDataApp);
 
-            // Dodaj dane do tabeli
             foreach (var app in apps)
             {
               migrationBuilder.InsertData(
@@ -61,11 +59,9 @@ namespace DotNetApi.Migrations
                 });
                 var filePathServer = Path.Combine("Data", "servers.json");
 
-                // Załaduj dane z JSON-a
                 var jsonDataServer = File.ReadAllText(filePathServer);
                 var servers = JsonConvert.DeserializeObject<List<AppServer>>(jsonDataServer);
 
-                // Dodaj dane do tabeli
                 foreach (var server in servers)
                 {
                   migrationBuilder.InsertData(
@@ -94,11 +90,9 @@ namespace DotNetApi.Migrations
 
                 var filePath = Path.Combine("Data", "tasks.json");
 
-                // Załaduj dane z JSON-a
                 var jsonData = File.ReadAllText(filePath);
                 var tasks = JsonConvert.DeserializeObject<List<AppTask>>(jsonData);
 
-                // Dodaj dane do tabeli
                 foreach (var task in tasks)
                 {
                   migrationBuilder.InsertData(

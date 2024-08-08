@@ -131,7 +131,7 @@ namespace DotNetApi.Controllers
         return NotFound("Task not found.");
 
       var existingTask = await _context.Tasks.FirstOrDefaultAsync(t => t.Name == updatedTask.Name);
-      if (existingTask != null)
+      if (existingTask != null && existingTask.Id != updatedTask.Id)
       {
         return Conflict(new { message = "Task with the same name already exists." });
       }

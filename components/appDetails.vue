@@ -10,7 +10,7 @@
       <tr @click="showTaskDetails(item.id)" class="clickable__row">
         <td>{{ item.name }}</td>
         <td>{{ item.date }}</td>
-        <td>{{ item.edition_date }}</td>
+        <td>{{ item.edition }}</td>
         <td>{{ item.server }}</td>
       </tr>
     </template>

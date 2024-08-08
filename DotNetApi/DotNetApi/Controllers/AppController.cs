@@ -142,7 +142,7 @@ namespace DotNetApi.Controllers
         return NotFound("Application not found.");
 
       var existingApp = await _context.Apps.FirstOrDefaultAsync(a => a.Name == updatedApp.Name);
-      if (existingApp != null)
+      if (existingApp != null && existingApp.Id != updatedApp.Id)
       {
         return Conflict(new { message = "Application with the same name already exists." });
       }

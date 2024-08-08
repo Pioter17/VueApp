@@ -127,11 +127,16 @@ export default {
             context.commit('reattachTasksToNewApplication', {
               newItem: payload.newItem,
             });
+            context.dispatch('fetchApps', {
+              pagination: [
+                context.getters.getCurrentPage,
+                context.getters.getItemsPerPage,
+              ],
+              search: ['', '', ''],
+              sortBy: [],
+              sortDesc: [],
+            });
           });
-        context.commit('putApplication', {
-          newItem: payload.newItem,
-          index: payload.index,
-        });
       } catch (error) {
         if (error.response.status == 409) {
           throw new Error(error.response.data.message);

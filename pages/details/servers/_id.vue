@@ -88,7 +88,7 @@ export default {
           id: server.id,
           name: server.name,
           date: server.date,
-          edition: server.edition_date,
+          edition: server.edition,
           applications: this.getApplicationsList(server.id),
           tasks: this.getTasksList(server.id),
         };
@@ -165,7 +165,7 @@ export default {
           id: this.serverDetails.id,
           name: this.editedItem.itemName,
           date: this.serverDetails.date,
-          edition_date: new Date().toISOString().split('T')[0],
+          edition: new Date().toISOString().split('T')[0],
         };
         try {
           await this.$store.dispatch('updateServer', {

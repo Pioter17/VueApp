@@ -115,7 +115,7 @@ namespace DotNetApi.Controllers
         return NotFound("Server not found.");
 
       var existingServer = await _context.Servers.FirstOrDefaultAsync(s => s.Name == updatedServer.Name);
-      if (existingServer != null)
+      if (existingServer != null && existingServer.Id != updatedServer.Id)
       {
         return Conflict(new { message = "Server with the same name already exists." });
       }

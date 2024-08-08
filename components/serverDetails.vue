@@ -16,7 +16,7 @@
             <tr @click="showAppDetails(item.id)" class="clickable__row">
               <td>{{ item.name }}</td>
               <td>{{ item.date }}</td>
-              <td>{{ item.edition_date }}</td>
+              <td>{{ item.edition }}</td>
               <td>{{ item.tasks }}</td>
             </tr>
           </template>
@@ -33,7 +33,7 @@
             <tr @click="showTaskDetails(item.id)" class="clickable__row">
               <td>{{ item.name }}</td>
               <td>{{ item.date }}</td>
-              <td>{{ item.edition_date }}</td>
+              <td>{{ item.edition }}</td>
               <td>
                 {{
                   item.application
