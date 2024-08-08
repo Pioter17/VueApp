@@ -142,6 +142,7 @@ export default {
   },
   methods: {
     fetchData() {
+      setTimeout(() => {}, 1000);
       this.loading = true;
       this.$store.dispatch('setItemsPerPage', this.options.itemsPerPage);
       this.$store.dispatch('setCurrentPage', this.options.page);
