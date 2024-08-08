@@ -57,9 +57,6 @@ export default {
       return this.$store.getters.getTasks.map((task) => {
         return {
           ...task,
-          server: this.$store.getters.getServers.find(
-            (server) => server.id == task.serverId
-          )?.name,
         };
       });
     },

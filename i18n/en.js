@@ -58,6 +58,8 @@ const eng = {
     application: 'Application',
     apps: 'Applications',
   },
+  exportPage: 'Export page',
+  exportAll: 'Export all',
   itemsAllText: 'All',
   itemsPerPage: 'Rows per page',
   goBack: 'Go back',

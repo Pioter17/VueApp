@@ -48,9 +48,17 @@
           ></v-text-field>
         </v-col>
         <v-spacer></v-spacer>
-        <v-btn color="primary" dark @click="openDialog">
-          {{ $t('addNew') }} {{ $t('itemType.' + itemType) }}
-        </v-btn>
+        <div class="buttons">
+          <v-btn color="success" width="210" @click="exportPage">
+            {{ $t('exportPage') }}
+          </v-btn>
+          <v-btn color="success" width="210" @click="exportAll">
+            {{ $t('exportAll') }}
+          </v-btn>
+          <v-btn color="primary" dark width="210" @click="openDialog">
+            {{ $t('addNew') }} {{ $t('itemType.' + itemType) }}
+          </v-btn>
+        </div>
       </v-toolbar>
     </template>
     <template v-slot:item="{ item }">
@@ -76,6 +84,7 @@
 <script>
 import { filterData } from '@pages/utils/functions/data-filter';
 import { getFooter } from '@core/constants/footer';
+import axios from 'axios';
 
 export default {
   inject: ['itemType', 'backLink', 'fetchFunction'],
@@ -151,6 +160,74 @@ export default {
           this.loading = false;
         });
     },
+    async exportAll() {
+      const itemName = this.itemType == 'application' ? 'App' : this.item;
+      const enpointURL =
+        'https://localhost:7092/api/' +
+        itemName[0].toUpperCase() +
+        itemName.slice(1) +
+        '/export-' +
+        this.itemType +
+        's';
+      try {
+        const response = await axios.get(enpointURL, {
+          responseType: 'blob',
+        });
+        const url = window.URL.createObjectURL(new Blob([response.data]));
+        const link = document.createElement('a');
+        link.href = url;
+        const date = new Date().toDateString();
+        link.setAttribute(
+          'download',
+          this.itemType[0].toUpperCase() +
+            this.itemType.slice(1) +
+            's -' +
+            date +
+            '.xlsx'
+        );
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+      } catch (error) {
+        console.error(error);
+      }
+    },
+    async exportPage() {
+      const itemName = this.itemType == 'application' ? 'App' : this.itemType;
+      const enpointURL =
+        'https://localhost:7092/api/' +
+        itemName[0].toUpperCase() +
+        itemName.slice(1) +
+        '/export-page';
+      try {
+        const response = await axios.get(enpointURL, {
+          params: {
+            pageNumber: this.options.page,
+            pageSize: this.options.itemsPerPage,
+            serverName: this.searchParams.searchServer,
+            applicationName: this.searchParams.searchApplication,
+            taskName: this.searchParams.searchTask,
+            sortBy: this.options.sortBy ? this.options.sortBy[0] : '',
+            sortDesc: this.options.sortDesc ? this.options.sortDesc[0] : false,
+          },
+          responseType: 'blob',
+        });
+
+        const url = window.URL.createObjectURL(new Blob([response.data]));
+        const link = document.createElement('a');
+        link.href = url;
+        link.setAttribute(
+          'download',
+          `${this.itemType}_Page_${this.options.page}.xlsx`
+        );
+
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+      } catch (error) {
+        console.error(error);
+      }
+    },
     handleRowClick(id) {
       this.$router.push(this.backLink + id);
     },
@@ -167,5 +244,11 @@ export default {
 <style scoped>
 .search {
   width: 100px;
+}
+
+.buttons {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
 }
 </style>

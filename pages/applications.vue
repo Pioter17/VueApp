@@ -61,9 +61,6 @@ export default {
       data.forEach((element) => {
         element = {
           ...element,
-          server: this.$store.getters.getServers.find(
-            (server) => server.id == element.serverId
-          )?.name,
           count: i,
         };
         newData.push(element);

@@ -3,6 +3,8 @@ using DotNetApi.Entities;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using OfficeOpenXml.Style;
+using OfficeOpenXml;
 
 namespace DotNetApi.Controllers
 {
@@ -23,13 +25,12 @@ namespace DotNetApi.Controllers
     int pageSize = 10,
     string serverName = "",
     string applicationName = "",
-    string sortBy = "Name", // Domyślne sortowanie
-    bool sortDesc = false // Domyślnie rosnąco
+    string sortBy = "Name", 
+    bool sortDesc = false 
 )
     {
       var appsQuery = _context.Apps.AsQueryable();
 
-      // Filtrowanie
       if (!string.IsNullOrWhiteSpace(serverName))
       {
         appsQuery = appsQuery.Where(a => a.Server.ToLower().Contains(serverName.ToLower()));
@@ -40,7 +41,6 @@ namespace DotNetApi.Controllers
         appsQuery = appsQuery.Where(a => a.Name.ToLower().Contains(applicationName.ToLower()));
       }
 
-      // Sortowanie
       appsQuery = sortBy switch
       {
         "name" => sortDesc ? appsQuery.OrderByDescending(a => a.Name) : appsQuery.OrderBy(a => a.Name),
@@ -88,7 +88,6 @@ namespace DotNetApi.Controllers
         return Ok(response);
       }
     }
-
 
     [HttpGet]
     public async Task<ActionResult<List<Application>>> getAllApps()
@@ -204,6 +203,121 @@ namespace DotNetApi.Controllers
 
       return Ok(await _context.Apps.ToListAsync());
     }
+
+    [HttpGet("export-applications")]
+    public async Task<IActionResult> ExportTasksToExcel()
+    {
+      var apps = await _context.Apps.ToListAsync();
+
+      using var package = new ExcelPackage();
+      var worksheet = package.Workbook.Worksheets.Add("Applications");
+
+      worksheet.Cells[1, 1].Value = "Id";
+      worksheet.Cells[1, 2].Value = "Name";
+      worksheet.Cells[1, 3].Value = "Date";
+      worksheet.Cells[1, 4].Value = "Edition";
+      worksheet.Cells[1, 5].Value = "Server";
+      worksheet.Cells[1, 6].Value = "ServerId";
+
+      using (var range = worksheet.Cells[1, 1, 1, 6])
+      {
+        range.Style.Font.Bold = true;
+        range.Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
+        range.Style.Fill.PatternType = ExcelFillStyle.Solid;
+        range.Style.Fill.BackgroundColor.SetColor(System.Drawing.Color.LightGray);
+      }
+
+      for (int i = 0; i < apps.Count; i++)
+      {
+        var app = apps[i];
+        worksheet.Cells[i + 2, 1].Value = app.Id;
+        worksheet.Cells[i + 2, 2].Value = app.Name;
+        worksheet.Cells[i + 2, 3].Value = app.Date;
+        worksheet.Cells[i + 2, 4].Value = app.Edition;
+        worksheet.Cells[i + 2, 5].Value = app.Server;
+        worksheet.Cells[i + 2, 6].Value = app.ServerId;
+      }
+
+      worksheet.Cells[worksheet.Dimension.Address].AutoFitColumns();
+
+      var stream = new MemoryStream();
+      package.SaveAs(stream);
+      stream.Position = 0;
+
+      string excelName = $"Applications-{DateTime.Now:yyyy-MM-dd-HH-mm-ss}.xlsx";
+      return File(stream, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", excelName);
+    }
+
+    [HttpGet("export-page")]
+    public async Task<ActionResult> ExportPage(
+    int pageNumber = 1,
+    int pageSize = 10,
+    string serverName = "",
+    string applicationName = "",
+    string sortBy = "Name",
+    bool sortDesc = false
+)
+    {
+      var appsQuery = _context.Apps.AsQueryable();
+
+      if (!string.IsNullOrWhiteSpace(serverName))
+      {
+        appsQuery = appsQuery.Where(a => a.Server.ToLower().Contains(serverName.ToLower()));
+      }
+
+      if (!string.IsNullOrWhiteSpace(applicationName))
+      {
+        appsQuery = appsQuery.Where(a => a.Name.ToLower().Contains(applicationName.ToLower()));
+      }
+
+      appsQuery = sortBy switch
+      {
+        "name" => sortDesc ? appsQuery.OrderByDescending(a => a.Name) : appsQuery.OrderBy(a => a.Name),
+        "date" => sortDesc ? appsQuery.OrderByDescending(a => a.Date) : appsQuery.OrderBy(a => a.Date),
+        _ => sortDesc ? appsQuery.OrderByDescending(a => a.Name) : appsQuery.OrderBy(a => a.Name),
+      };
+
+      if (pageNumber <= 0 || pageSize <= 0)
+      {
+        return BadRequest("Page number and page size must be greater than zero.");
+      }
+
+      var apps = await appsQuery
+                          .Skip((pageNumber - 1) * pageSize)
+                          .Take(pageSize)
+                          .ToListAsync();
+
+      using (var package = new ExcelPackage())
+      {
+        var worksheet = package.Workbook.Worksheets.Add("Page Data");
+
+        worksheet.Cells[1, 1].Value = "Id";
+        worksheet.Cells[1, 2].Value = "Name";
+        worksheet.Cells[1, 3].Value = "Date";
+        worksheet.Cells[1, 4].Value = "Edition";
+        worksheet.Cells[1, 5].Value = "Server";
+        worksheet.Cells[1, 6].Value = "ServerId";
+
+        for (int i = 0; i < apps.Count; i++)
+        {
+          var app = apps[i];
+          worksheet.Cells[i + 2, 1].Value = app.Id;
+          worksheet.Cells[i + 2, 2].Value = app.Name;
+          worksheet.Cells[i + 2, 3].Value = app.Date;
+          worksheet.Cells[i + 2, 4].Value = app.Edition;
+          worksheet.Cells[i + 2, 5].Value = app.Server;
+          worksheet.Cells[i + 2, 6].Value = app.ServerId;
+        }
+
+        var stream = new MemoryStream();
+        package.SaveAs(stream);
+        stream.Position = 0;
+
+        var fileName = $"Apps_Page_{pageNumber}.xlsx";
+        return File(stream, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", fileName);
+      }
+    }
+
   }
 }
 

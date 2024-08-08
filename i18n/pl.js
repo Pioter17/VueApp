@@ -56,6 +56,8 @@ const pol = {
     application: 'Aplikacja',
     apps: 'Aplikacje',
   },
+  exportPage: 'Eksportuj stronę',
+  exportAll: 'Eksportuj wszystkie',
   itemsAllText: 'Wszystkie',
   itemsPerPage: 'Wiersze na stronę',
   goBack: 'Wróć',
